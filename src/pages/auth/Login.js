@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useFormik} from "formik";
 import axios from 'axios'
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -35,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn() {
+function SignIn(props) {
+    console.log(props)
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
 
@@ -58,10 +60,24 @@ export default function SignIn() {
         onSubmit: values => {
             setIsLoading(true)
             alert(JSON.stringify(values, null, 2));
-            const response = axios.get('https://api.noirdjinn.dev/user/3')
+            const response = axios.post(`https://api.noirdjinn.dev/user/authenticate?email=${values.email}&password=${values.password}`)
                 .then(result => {
                     alert(JSON.stringify(result, null, 2));
-                    setIsLoading('done')
+                    console.log(result.data.user_id)
+                    const info = axios.get(`https://api.noirdjinn.dev/user/id/${result.data.user_id}`)
+                        .then(userInfo => {
+                            console.log(userInfo.data.id,userInfo.data.email,userInfo.data.first_name,userInfo.data.last_name)
+                            props.userUpdate(
+                                userInfo.data.id,
+                                result.data.access_token,
+                                userInfo.data.first_name,
+                                userInfo.data.last_name,
+                                userInfo.data.email,
+                                123456)
+
+                        })
+
+
                 })
                 .catch(error => {
                     alert("Ошибка, попробуйте ввести новые данные")
@@ -77,6 +93,7 @@ export default function SignIn() {
         (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
+
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -144,3 +161,18 @@ export default function SignIn() {
         </Container>
     );
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.user,
+        loading: state.loading,
+        isLogining: state.isLogining
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        userUpdate: (id,token,name,surname,email,password) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,password}})
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
