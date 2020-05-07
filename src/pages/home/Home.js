@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Link} from 'react-router-dom'
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     heroContent: {
@@ -17,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Home() {
+function Home(props) {
     const classes = useStyles();
-
+console.log(props)
     return (
         <React.Fragment >
                 <Container maxWidth="sm" className={classes.heroContent}>
@@ -53,3 +54,18 @@ export default function Home() {
         </React.Fragment>
     );
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.profile.user,
+        loading: state.profile.loading,
+        isLogining: state.profile.isLogining,
+        state: state
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+          }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

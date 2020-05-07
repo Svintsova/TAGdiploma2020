@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import {Link as RouterLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
 import {useFormik} from "formik";
+import {connect} from "react-redux";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SignUp() {
+function SignUp(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
 
@@ -73,6 +74,8 @@ export default function SignUp() {
         initialValues: {
             email: '',
             password: '',
+            name: '',
+            surname: '',
         },
         validate,
 
@@ -82,6 +85,13 @@ export default function SignUp() {
             const response = axios.post('https://api.noirdjinn.dev/user/new', values)
                 .then(result => {
                     alert(JSON.stringify(result.data.id, null, 2));
+                    props.userUpdate(
+                        result.data.id,
+                        result.data.access_token,
+                        formik.values.name,
+                        formik.values.surname,
+                        formik.values.email,
+                        formik.values.password)
                     setIsLoading('done')
 
                 })
@@ -90,7 +100,7 @@ export default function SignUp() {
                     setIsLoading(false)
                 })
 
-            console.log(response.data)
+            console.log(props)
         },
     });
 
@@ -188,3 +198,18 @@ export default function SignUp() {
         </Container>
     );
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.profile.user,
+        loading: state.profile.loading,
+        isLogining: state.profile.isLogining,
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        userUpdate: (id,token,name,surname,email,password) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,password}})
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp)

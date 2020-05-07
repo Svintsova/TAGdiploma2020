@@ -1,6 +1,6 @@
 const initialState = {
     user: null,
-    loading: 10,
+    loading: false,
     isLogining: false
 }
 
@@ -15,6 +15,7 @@ export default function profileReducer (state = initialState, action) {
                     surname: action.payload.surname,
                     email: action.payload.email,
                     password: action.payload.password,
+                    root: 'admin'
                 },
                 loading: true,
                 isLogining: true

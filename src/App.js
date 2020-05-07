@@ -13,6 +13,7 @@ import Actions from "./pages/actions/actions";
 import Profile from "./pages/profile/Profile";
 import Home from "./pages/home/Home";
 import History from "./pages/history/History";
+import Database from "./pages/actions/database/Database";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/dashboard" render={() => <Layout> <Actions /></Layout>} />
                 <Route path="/history" render={() => <Layout><History /></Layout>} />
                 <Route path="/profile" render={() => <Layout><Profile /></Layout>} />
+                <Route path="/database" render={() => <Layout><Database /></Layout>} />
 
               </Switch>
                 <Box mt={8}>

@@ -25,19 +25,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Profile() {
+function Profile(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
+
     const formik = useFormik({
         initialValues: {
-            email: '',
-            password: '',
-            name: '',
-            surname:'',
+            email: props.user.email,
+            password: props.user.password,
+            name: props.user.name,
+            surname:props.user.surname,
             type: '',
-            id:''
+            id:props.id
         },
-
         onSubmit: values => {
             setIsLoading(true)
             alert(JSON.stringify(values, null, 2));
@@ -76,7 +76,7 @@ function Profile() {
                         value={formik.values.name}
                     />
                     <TextField
-                        id="name"
+                        id="surname"
                         variant="outlined"
                         label="Фамилия"
                         margin="normal"
@@ -133,13 +133,14 @@ function Profile() {
 function mapStateToProps(state) {
     return {
         user: state.profile.user,
-        loading: state.profile.loading
+        loading: state.profile.loading,
+        isLogining: state.profile.isLogining
     }
 }
-function mapDispatchToProps(dispatch) {
-   return {
-       fetchProfile: () => dispatch()
-   }
-}
 
-export default connect(mapStateToProps,mapDispatchToProps)(Profile)
+function mapDispatchToProps(dispatch) {
+    return {
+        userUpdate: (name,surname,password) => dispatch({type: 'USER_UPDATE', payload: { name,surname,password}})
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

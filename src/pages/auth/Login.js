@@ -74,7 +74,7 @@ function SignIn(props) {
                                 userInfo.data.last_name,
                                 userInfo.data.email,
                                 123456)
-
+                            setIsLoading('done')
                         })
 
 
@@ -164,9 +164,9 @@ function SignIn(props) {
 
 function mapStateToProps(state) {
     return {
-        user: state.user,
-        loading: state.loading,
-        isLogining: state.isLogining
+        user: state.profile.user,
+        loading: state.profile.loading,
+        isLogining: state.profile.isLogining,
     }
 }
 

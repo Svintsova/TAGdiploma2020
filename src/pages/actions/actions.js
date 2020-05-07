@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
     cardGrid: {
@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
 const cards = [
     {id: 0, title: 'Взять', href: '/database', lid: 'Выбор и бронирование необходимого оборудования.'},
     {id: 1, title: 'Оставить', href: '/statistics', lid: 'Зарезервировать ячейку под документы.'},
-    {id: 2, title: 'База данных', href: '/profile', lid: 'Просмотр, удаление/добавление, изменение прав доступа.'},
-    {id: 3, title: 'Статистика', href: '/actions', lid: 'Просмотр статистики использования оборудования.'},
+    {id: 2, title: 'База данных', href: '/database', lid: 'Просмотр, удаление/добавление, изменение прав доступа.'},
+    {id: 3, title: 'Статистика', href: '/statistics', lid: 'Просмотр статистики использования оборудования.'},
 ];
 
 
@@ -50,11 +50,13 @@ export default function Actions() {
                         <Grid item key={card.id} xs={12} sm={6} md={4}>
                             <Card className={classes.card}>
 
-                                <Button size="large" color="primary" className={classes.Button}>
+                                <Link to={card.href}>
+                                    <Button size="large" color="primary" className={classes.Button}>
                                     <Typography gutterBottom variant="h5" component="h2">
                                         {card.title}
                                     </Typography>
                                 </Button>
+                                </Link>
                                 <CardContent className={classes.cardContent}>
                                     <Typography>
                                         {card.lid}
