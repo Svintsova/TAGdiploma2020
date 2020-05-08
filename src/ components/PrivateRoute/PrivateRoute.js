@@ -12,7 +12,7 @@ const PrivateRoute = ({ component, admin, user, ...rest }) => {
     } else if (admin && user.root !== 'admin') {
         renderer = () => <Redirect to={'/'} />
     } else {
-        renderer = (props: RouteComponentProps<any>) =>
+        renderer = (props) =>
             React.createElement(component, props);
     }
     return <Route {...rest} render={renderer} />;

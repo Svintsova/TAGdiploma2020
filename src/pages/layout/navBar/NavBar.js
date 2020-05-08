@@ -36,7 +36,6 @@ export const useStyles = makeStyles((theme) => ({
 
 function NavBar(props)  {
     const classes = useStyles();
-
     return (
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
@@ -81,7 +80,11 @@ const mapStateToProps = (state) => ({
 });
 function mapDispatchToProps(dispatch) {
     return {
-        logOut: () => dispatch({type: 'USER_LOGOUT'})
+        logOut: () => {
+            document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            return dispatch({type: 'USER_LOGOUT'});
+        }
     }
 }
 

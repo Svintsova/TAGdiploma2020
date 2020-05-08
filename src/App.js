@@ -36,11 +36,20 @@ function App(props) {
                         userInfo.data.last_name,
                         userInfo.data.email,
                         123456)
+                    props.changeLoaded()
                 })
+                .catch(error => {
+                props.changeLoaded()
+            })
         }
+         else {props.changeLoaded()}
     }, [])
-    console.log( 'меня вызвал вова ',props.user)
-    if (!props.IsLoaded) { return null }
+    console.log( 'меня вызвал вова ',props.user,props.IsLoaded)
+
+    if (!props.IsLoaded) {
+        return null
+    }
+
   return (
 
           <BrowserRouter>
@@ -76,7 +85,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userUpdate: (id,token,name,surname,email,password) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,password}})
+        userUpdate: (id,token,name,surname,email,password) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,password}}),
+        changeLoaded: () =>  dispatch({type: 'SET_LOADED'})
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(App)

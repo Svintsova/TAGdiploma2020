@@ -17,7 +17,7 @@ export default function profileReducer (state = initialState, action) {
                     surname: action.payload.surname,
                     email: action.payload.email,
                     password: action.payload.password,
-                    root: 'user'
+                    root: 'admin'
                 },
                 loading: false,
                 IsLoaded: true
@@ -26,6 +26,12 @@ export default function profileReducer (state = initialState, action) {
             return {
                 user: null,
                 loading: false,
+                IsLoaded: true
+            }
+        case 'SET_LOADED':
+            return {
+                user: state.user,
+                loading: state.loading,
                 IsLoaded: true
             }
         default:
