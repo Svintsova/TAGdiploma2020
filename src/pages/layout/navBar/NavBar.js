@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import {Link as RouterLink} from 'react-router-dom'
+import {connect} from "react-redux";
 
 export const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -33,11 +34,10 @@ export const useStyles = makeStyles((theme) => ({
 
 
 
-export const NavBar = () => {
+function NavBar(props)  {
     const classes = useStyles();
 
     return (
-
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
@@ -62,8 +62,8 @@ export const NavBar = () => {
                         </Link>
                     </RouterLink>
                 </nav>
-                <RouterLink to="/">
-                    <Button href="#" color="primary" variant="outlined" className={classes.link}>
+                <RouterLink to="/login">
+                    <Button href="#" color="primary" variant="outlined" className={classes.link} onClick={props.logOut}>
                     Выход
                     </Button>
                 </RouterLink>
@@ -73,3 +73,16 @@ export const NavBar = () => {
     );
 }
 
+
+const mapStateToProps = (state) => ({
+    user: state.profile.user,
+    loading: state.profile.loading,
+    isLogining: state.profile.isLogining,
+});
+function mapDispatchToProps(dispatch) {
+    return {
+        logOut: () => dispatch({type: 'USER_LOGOUT'})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

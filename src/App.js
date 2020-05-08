@@ -1,8 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
-
 import './App.css';
-
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import Typography from "@material-ui/core/Typography";
@@ -14,6 +12,7 @@ import Profile from "./pages/profile/Profile";
 import Home from "./pages/home/Home";
 import History from "./pages/history/History";
 import Database from "./pages/actions/database/Database";
+import PrivateRoute from "./ components/PrivateRoute/PrivateRoute";
 
 function App() {
   return (
@@ -21,14 +20,15 @@ function App() {
           <BrowserRouter>
             <div className="">
               <Switch>
-                <Route path="/" exact component={Login}/>
-                <Route path="/sign-up" component={SignUp}/>
-                <Route path="/home" render={() => <Layout> <Home /> </Layout>} />
-                <Route path="/dashboard" render={() => <Layout> <Actions /></Layout>} />
-                <Route path="/history" render={() => <Layout><History /></Layout>} />
-                <Route path="/profile" render={() => <Layout><Profile /></Layout>} />
-                <Route path="/database" render={() => <Layout><Database /></Layout>} />
-
+                <Route path="/login" exact component={Login}/>
+                <Route exact path="/sign-up" component={SignUp}/>
+                <Layout>
+                <PrivateRoute exact path="/home" component={Home} />
+                <PrivateRoute exact path="/dashboard" component={Actions} />
+                <PrivateRoute exact path="/history" component={History} />
+                <PrivateRoute exact path="/profile" component={Profile} />
+                <PrivateRoute exact admin path="/database" component={Database} />
+                </Layout>
               </Switch>
                 <Box mt={8}>
                     <Copyright />
@@ -55,3 +55,4 @@ export function Copyright() {
         </Typography>
     );
 }
+

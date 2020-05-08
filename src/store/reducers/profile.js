@@ -15,10 +15,16 @@ export default function profileReducer (state = initialState, action) {
                     surname: action.payload.surname,
                     email: action.payload.email,
                     password: action.payload.password,
-                    root: 'admin'
+                    root: 'user'
                 },
                 loading: true,
                 isLogining: true
+            }
+        case 'USER_LOGOUT':
+            return {
+                user: null,
+                loading: true,
+                isLogining: false
             }
         default:
             return state

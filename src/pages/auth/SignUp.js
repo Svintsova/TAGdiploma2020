@@ -188,7 +188,7 @@ function SignUp(props) {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                           <RouterLink to="/"> <Link href="#" variant="body2">
+                           <RouterLink to="/login"> <Link href="#" variant="body2">
                                 Already have an account? Sign in
                            </Link> </RouterLink>
                         </Grid>
