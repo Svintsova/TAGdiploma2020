@@ -84,7 +84,12 @@ function SignUp(props) {
             alert(JSON.stringify(values, null, 2));
             const response = axios.post('https://api.noirdjinn.dev/user/new', values)
                 .then(result => {
-                    alert(JSON.stringify(result.data.id, null, 2));
+                    let user_id = result.data.user_id
+                    let user_token = result.data.access_token
+                    document.cookie = 'id='+encodeURIComponent(user_id)
+                    document.cookie = 'path=/; max-age=3600'
+                    document.cookie = 'token='+encodeURIComponent(user_token)
+
                     props.userUpdate(
                         result.data.id,
                         result.data.access_token,
@@ -104,7 +109,7 @@ function SignUp(props) {
         },
     });
 
-    return isLoading==='done' ? <Redirect to="/home" /> :
+    return isLoading==='done' ? <Redirect to="/" /> :
     (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -203,7 +208,7 @@ function mapStateToProps(state) {
     return {
         user: state.profile.user,
         loading: state.profile.loading,
-        isLogining: state.profile.isLogining,
+        IsLoaded: state.profile.IsLoaded,
     }
 }
 

@@ -41,7 +41,7 @@ function NavBar(props)  {
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                    TAKE & GO
+                    <RouterLink to="/">TAKE & GO</RouterLink>
                 </Typography>
                 <nav>
                     <RouterLink to="/dashboard">

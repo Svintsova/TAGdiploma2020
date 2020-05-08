@@ -1,7 +1,9 @@
+
+
 const initialState = {
     user: null,
     loading: false,
-    isLogining: false
+    IsLoaded: false
 }
 
 export default function profileReducer (state = initialState, action) {
@@ -17,14 +19,14 @@ export default function profileReducer (state = initialState, action) {
                     password: action.payload.password,
                     root: 'user'
                 },
-                loading: true,
-                isLogining: true
+                loading: false,
+                IsLoaded: true
             }
         case 'USER_LOGOUT':
             return {
                 user: null,
-                loading: true,
-                isLogining: false
+                loading: false,
+                IsLoaded: true
             }
         default:
             return state

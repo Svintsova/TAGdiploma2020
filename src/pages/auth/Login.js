@@ -59,11 +59,16 @@ function SignIn(props) {
         validate,
         onSubmit: values => {
             setIsLoading(true)
-            alert(JSON.stringify(values, null, 2));
             const response = axios.post(`https://api.noirdjinn.dev/user/authenticate?email=${values.email}&password=${values.password}`)
                 .then(result => {
-                    alert(JSON.stringify(result, null, 2));
-                    console.log(result.data.user_id)
+//cookies
+                    let user_id = result.data.user_id
+                    let user_token = result.data.access_token
+                    document.cookie = 'id='+encodeURIComponent(user_id)
+                    document.cookie = 'path=/; max-age=3600'
+                    document.cookie = 'token='+encodeURIComponent(user_token)
+
+
                     const info = axios.get(`https://api.noirdjinn.dev/user/id/${result.data.user_id}`)
                         .then(userInfo => {
                             console.log(userInfo.data.id,userInfo.data.email,userInfo.data.first_name,userInfo.data.last_name)
@@ -84,12 +89,11 @@ function SignIn(props) {
                     setIsLoading(false)
                 })
 
-            console.log(response.data)
+            console.log('response.data из Login.js ', response.data)
         },
     });
 
-
-    return isLoading==='done'? <Redirect to="/home" /> :
+    return isLoading==='done'||props.user? <Redirect to="/" />:
         (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -166,7 +170,7 @@ function mapStateToProps(state) {
     return {
         user: state.profile.user,
         loading: state.profile.loading,
-        isLogining: state.profile.isLogining,
+        IsLoaded: state.profile.IsLoaded,
     }
 }
 

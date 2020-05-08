@@ -5,11 +5,12 @@ import {Redirect, Route, RouteComponentProps, RouteProps} from 'react-router';
 
 const PrivateRoute = ({ component, admin, user, ...rest }) => {
     let renderer = null;
+    console.log('PRIVET',{ component, admin, user, ...rest })
     if (!user) {
         const backPath = btoa(window.location.pathname + window.location.search);
         renderer = () => <Redirect to={`/login?to=${backPath}`} />
     } else if (admin && user.root !== 'admin') {
-        renderer = () => <Redirect to={'/home'} />
+        renderer = () => <Redirect to={'/'} />
     } else {
         renderer = (props: RouteComponentProps<any>) =>
             React.createElement(component, props);
@@ -20,7 +21,7 @@ const PrivateRoute = ({ component, admin, user, ...rest }) => {
 const mapStateToProps = (state) => ({
     user: state.profile.user,
     loading: state.profile.loading,
-    isLogining: state.profile.isLogining,
+    IsLoaded: state.profile.IsLoaded,
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

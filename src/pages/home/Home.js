@@ -59,7 +59,7 @@ function mapStateToProps(state) {
     return {
         user: state.profile.user,
         loading: state.profile.loading,
-        isLogining: state.profile.isLogining,
+        IsLoaded: state.profile.IsLoaded,
         state: state
     }
 }
