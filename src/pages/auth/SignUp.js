@@ -84,19 +84,18 @@ function SignUp(props) {
             alert(JSON.stringify(values, null, 2));
             const response = axios.post('https://api.noirdjinn.dev/user/new', values)
                 .then(result => {
+                    alert("response")
                     let user_id = result.data.user_id
                     let user_token = result.data.access_token
-                    document.cookie = 'id='+encodeURIComponent(user_id)
+                    document.cookie = 'max-age=3600; id='+encodeURIComponent(user_id)
                     document.cookie = 'path=/; max-age=3600'
-                    document.cookie = 'token='+encodeURIComponent(user_token)
-
+                    document.cookie = 'max-age=3600; token='+encodeURIComponent(user_token)
                     props.userUpdate(
                         result.data.id,
                         result.data.access_token,
                         formik.values.name,
                         formik.values.surname,
-                        formik.values.email,
-                        formik.values.password)
+                        formik.values.email)
                     setIsLoading('done')
 
                 })
@@ -214,7 +213,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userUpdate: (id,token,name,surname,email,password) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,password}})
+        userUpdate: (id,token,name,surname,email) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email}})
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp)

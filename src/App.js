@@ -26,17 +26,18 @@ function getCookie(name) {
 function App(props) {
     useEffect(() => {
         let isInit = getCookie('id')
+        let isToken = getCookie('token')
         if (isInit) {
-            const response = axios.get(`https://api.noirdjinn.dev/user/id/${isInit}`)
+            const response = axios.get(`https://api.noirdjinn.dev/user/id/${isInit}?token=${isToken}`)
                 .then(userInfo => {
                     props.userUpdate(
                         userInfo.data.id,
-                        getCookie('token'),
+                        isToken,
                         userInfo.data.first_name,
                         userInfo.data.last_name,
-                        userInfo.data.email,
-                        123456)
+                        userInfo.data.email)
                     props.changeLoaded()
+                    console.log('UserInfo', userInfo)
                 })
                 .catch(error => {
                 props.changeLoaded()
@@ -85,7 +86,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userUpdate: (id,token,name,surname,email,password) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,password}}),
+        userUpdate: (id,token,name,surname,email) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email}}),
         changeLoaded: () =>  dispatch({type: 'SET_LOADED'})
     }
 }

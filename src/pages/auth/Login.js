@@ -69,17 +69,17 @@ function SignIn(props) {
                     document.cookie = 'token='+encodeURIComponent(user_token)
 
 
-                    const info = axios.get(`https://api.noirdjinn.dev/user/id/${result.data.user_id}`)
+                    const info = axios.get(`https://api.noirdjinn.dev/user/id/${user_id}?token=${user_token}`)
                         .then(userInfo => {
-                            console.log(userInfo.data.id,userInfo.data.email,userInfo.data.first_name,userInfo.data.last_name)
                             props.userUpdate(
                                 userInfo.data.id,
                                 result.data.access_token,
                                 userInfo.data.first_name,
                                 userInfo.data.last_name,
                                 userInfo.data.email,
-                                123456)
+                                userInfo.data.is_admin)
                             setIsLoading('done')
+                            console.log('get user из Login.js ', userInfo)
                         })
 
 
@@ -89,7 +89,6 @@ function SignIn(props) {
                     setIsLoading(false)
                 })
 
-            console.log('response.data из Login.js ', response.data)
         },
     });
 
@@ -176,7 +175,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userUpdate: (id,token,name,surname,email,password) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,password}})
+        userUpdate: (id,token,name,surname,email,is_admin) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,is_admin}})
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn)

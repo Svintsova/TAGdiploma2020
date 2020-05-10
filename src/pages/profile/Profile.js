@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import {connect} from "react-redux";
 import {useFormik} from "formik";
 import axios from "axios";
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -31,24 +32,44 @@ function Profile(props) {
 
     const formik = useFormik({
         initialValues: {
-            email: props.user.email,
-            password: props.user.password,
             name: props.user.name,
             surname:props.user.surname,
-            type: '',
-            id:props.id
+            id: props.user.id
         },
         onSubmit: values => {
             setIsLoading(true)
             alert(JSON.stringify(values, null, 2));
-            const response = axios.post('https://api.noirdjinn.dev/user/new', values)
+            const response = axios.post(`https://api.noirdjinn.dev/user/update_info?token=${props.user.token}`, values)
                 .then(result => {
                     alert(JSON.stringify(result, null, 2));
-                    setIsLoading('done')
+                    props.profileUpdate(values.name,values.surname)
+                    setIsLoading(false)
 
                 })
                 .catch(error => {
-                    alert("PIZDEC")
+                    alert("При обновлении профиля произошла ошибка")
+                    setIsLoading(false)
+                })
+
+        },
+    });
+
+    const formikPass = useFormik({
+        initialValues: {
+            old_password: null,
+            new_password: null,
+            token: props.user.token,
+        },
+        onSubmit: values => {
+            setIsLoading(true)
+            alert(JSON.stringify(values, null, 2));
+            const response = axios.post(`https://api.noirdjinn.dev/user/update_password?token=${values.token}&old_password=${values.old_password}&new_password=${values.new_password}`)
+                .then(result => {
+                    alert(JSON.stringify(result, null, 2));
+                    setIsLoading(false)
+                })
+                .catch(error => {
+                    alert("При смене пароля произошла ошибка")
                     setIsLoading(false)
                 })
 
@@ -59,11 +80,11 @@ function Profile(props) {
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <div className={classes.paper}>
+            <Paper className={classes.paper}  elevation={3}>
                 <Typography component="h1" variant="h5">
                     Ваши данные
                 </Typography>
-                <form className={classes.form} onSubmit={formik.handleSubmit}>
+                <form className={classes.form} onSubmit={formik.handleSubmit} >
                     <TextField
                         id="name"
                         variant="outlined"
@@ -97,7 +118,41 @@ function Profile(props) {
                         disabled
                         autoComplete="email"
                         onChange={formik.handleChange}
-                        value={formik.values.email}
+                        value={props.user.email}
+                    />
+
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        disabled={isLoading}
+
+                    >
+                        Обновить информацию
+                    </Button>
+                </form>
+
+            </Paper>
+
+            <Paper className={classes.paper}  elevation={3}>
+                <form className={classes.form} onSubmit={formikPass.handleSubmit} >
+                    <Typography component="h1" variant="h5"  align="center">
+                        Смена пароля
+                    </Typography>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        multiline
+                        required
+                        fullWidth
+                        label="Текущий пароль"
+                        type="password"
+                        id="old_password"
+                        autoComplete="current-password"
+                        onChange={formikPass.handleChange}
+                        value={formikPass.values.old_password}
                     />
                     <TextField
                         variant="outlined"
@@ -105,26 +160,25 @@ function Profile(props) {
                         multiline
                         required
                         fullWidth
-                        label="Password"
+                        label="Новый пароль"
                         type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
+                        id="new_password"
+                        onChange={formikPass.handleChange}
+                        value={formikPass.values.new_password}
                     />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            disabled={isLoading||formik.errors.name||formik.errors.surname}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.submit}
+                        disabled={isLoading}
 
-                        >
-                            Обновить информацию
-                        </Button>
+                    >
+                        Подтвердить
+                    </Button>
                 </form>
-            </div>
+            </Paper>
 
         </Container>
     );
@@ -140,7 +194,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userUpdate: (name,surname,password) => dispatch({type: 'USER_UPDATE', payload: { name,surname,password}})
+        profileUpdate: (name,surname) => dispatch({type: 'PROFILE_UPDATE', payload: {name,surname}})
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

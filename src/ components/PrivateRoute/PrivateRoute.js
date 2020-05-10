@@ -9,7 +9,7 @@ const PrivateRoute = ({ component, admin, user, ...rest }) => {
     if (!user) {
         const backPath = btoa(window.location.pathname + window.location.search);
         renderer = () => <Redirect to={`/login?to=${backPath}`} />
-    } else if (admin && user.root !== 'admin') {
+    } else if (admin && user.is_admin) {
         renderer = () => <Redirect to={'/'} />
     } else {
         renderer = (props) =>
