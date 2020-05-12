@@ -36,12 +36,25 @@ export default function profileReducer (state = initialState, action) {
         case 'PROFILE_UPDATE':
             return {
                 user: {
-                    id: state.profile.id,
-                    token: state.profile.token,
+                    id: state.user.id,
+                    token: state.user.token,
                     name: action.payload.name,
                     surname: action.payload.surname,
-                    email: state.profile.email,
-                    is_admin: state.profile.is_admin
+                    email: state.user.email,
+                    is_admin: state.user.is_admin
+                },
+                loading: false,
+                IsLoaded: true
+            }
+        case "CHANGE_ADMIN":
+            return {
+                user: {
+                    id: state.user.id,
+                    token: state.user.token,
+                    name: state.user.name,
+                    surname: state.user.surname,
+                    email: state.user.email,
+                    is_admin: action.payload.is_admin
                 },
                 loading: false,
                 IsLoaded: true

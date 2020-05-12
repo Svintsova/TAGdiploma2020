@@ -38,16 +38,16 @@ function Profile(props) {
         },
         onSubmit: values => {
             setIsLoading(true)
-            alert(JSON.stringify(values, null, 2));
             const response = axios.post(`https://api.noirdjinn.dev/user/update_info?token=${props.user.token}`, values)
                 .then(result => {
-                    alert(JSON.stringify(result, null, 2));
-                    props.profileUpdate(values.name,values.surname)
+                    console.log('User was update', result);
+                    props.profileUpdate(result.data.first_name,result.data.last_name)
                     setIsLoading(false)
-
+                    axios.post(`https://api.noirdjinn.dev/user/make_admin?id=${props.user.id}&token=${props.user.token}&is_admin=true`)
+                    props.changeAdmin(true)
                 })
                 .catch(error => {
-                    alert("При обновлении профиля произошла ошибка")
+                    console.log("При обновлении профиля произошла ошибка:", error)
                     setIsLoading(false)
                 })
 
@@ -62,14 +62,12 @@ function Profile(props) {
         },
         onSubmit: values => {
             setIsLoading(true)
-            alert(JSON.stringify(values, null, 2));
             const response = axios.post(`https://api.noirdjinn.dev/user/update_password?token=${values.token}&old_password=${values.old_password}&new_password=${values.new_password}`)
                 .then(result => {
-                    alert(JSON.stringify(result, null, 2));
                     setIsLoading(false)
                 })
                 .catch(error => {
-                    alert("При смене пароля произошла ошибка")
+                    console.log("При смене пароля произошла ошибка", error)
                     setIsLoading(false)
                 })
 
@@ -80,8 +78,8 @@ function Profile(props) {
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <Paper className={classes.paper}  elevation={3}>
-                <Typography component="h1" variant="h5">
+            <div className={classes.paper}  >
+                <Typography variant="h5">
                     Ваши данные
                 </Typography>
                 <form className={classes.form} onSubmit={formik.handleSubmit} >
@@ -134,9 +132,9 @@ function Profile(props) {
                     </Button>
                 </form>
 
-            </Paper>
+            </div>
 
-            <Paper className={classes.paper}  elevation={3}>
+            <div className={classes.paper} >
                 <form className={classes.form} onSubmit={formikPass.handleSubmit} >
                     <Typography component="h1" variant="h5"  align="center">
                         Смена пароля
@@ -178,7 +176,7 @@ function Profile(props) {
                         Подтвердить
                     </Button>
                 </form>
-            </Paper>
+            </div>
 
         </Container>
     );
@@ -194,7 +192,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        profileUpdate: (name,surname) => dispatch({type: 'PROFILE_UPDATE', payload: {name,surname}})
+        profileUpdate: (name,surname) => dispatch({type: 'PROFILE_UPDATE', payload: {name,surname}}),
+        changeAdmin: (is_admin) => dispatch({type: 'CHANGE_ADMIN', payload: {is_admin}})
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

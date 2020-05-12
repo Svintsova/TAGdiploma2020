@@ -1,9 +1,8 @@
 import React from 'react';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import UserTable from "./UserTable";
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Container from "@material-ui/core/Container";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -13,17 +12,18 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
+        justifyContent: "center",
     },
 }));
 
 export default function Database() {
     const classes = useStyles();
     return (
-        <Grid item xs={12}>
+        <Container component="main" maxWidth="md">
             <Paper className={classes.paper}>
                 <UserTable />
             </Paper>
-        </Grid>
+        </Container>
     );
 }
 

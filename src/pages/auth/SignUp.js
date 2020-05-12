@@ -84,12 +84,12 @@ function SignUp(props) {
             alert(JSON.stringify(values, null, 2));
             const response = axios.post('https://api.noirdjinn.dev/user/new', values)
                 .then(result => {
-                    alert("response")
+                    alert(response)
                     let user_id = result.data.user_id
                     let user_token = result.data.access_token
-                    document.cookie = 'max-age=3600; id='+encodeURIComponent(user_id)
-                    document.cookie = 'path=/; max-age=3600'
-                    document.cookie = 'max-age=3600; token='+encodeURIComponent(user_token)
+                    document.cookie = 'Max-Age=3600; id='+encodeURIComponent(user_id)
+                    document.cookie = 'path=/; Max-Age=3600'
+                    document.cookie = 'Max-Age=3600; token='+encodeURIComponent(user_token)
                     props.userUpdate(
                         result.data.id,
                         result.data.access_token,

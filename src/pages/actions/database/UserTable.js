@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -10,85 +10,95 @@ import Typography from '@material-ui/core/Typography';
 import {useFormik} from "formik";
 import axios from "axios";
 import {connect} from "react-redux";
-
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-    return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-    createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44),
-    createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99),
-    createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-    createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-];
-
+import Loader from "../../../ components/Loader/Loader";
+import Button from '@material-ui/core/Button';
 
 function preventDefault(event) {
     event.preventDefault();
 }
 
 const useStyles = makeStyles((theme) => ({
-    seeMore: {
-        marginTop: theme.spacing(3),
+    label: {
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
     },
 }));
 
 function UserTable(props) {
     const classes = useStyles();
-    const userList = {}
-
-    const response = axios.get(`https://api.noirdjinn.dev/user/?token=${props.user.token}`)
-        .then(result => {
-            alert(JSON.stringify(result, null, 2))
-            userList = result.users
-            console.log(userList)
-            console.log(result.users)
-        })
-        .catch(error => {
-            alert("PIZDEC")
-        })
-
-    console.log(userList)
+    const [isLoading, setIsLoading] = useState(false)
+    const [userList, setUserList] = useState({})
 
 
 
 
 
-    return (
-        <React.Fragment>
-            <Typography>Recent Orders</Typography>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>id</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Surname</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Password</TableCell>
-                        <TableCell>Root</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell>{row.date}</TableCell>
-                            <TableCell>{row.name}</TableCell>
-                            <TableCell>{row.shipTo}</TableCell>
-                            <TableCell>{row.paymentMethod}</TableCell>
-                            <TableCell align="right">{row.amount}</TableCell>
+    useEffect(() => {
+        axios.get(`https://api.noirdjinn.dev/user/all?token=${props.user.token}`)
+            .then(result => {
+                setUserList(result.data)
+                console.log(result.data)
+                setIsLoading(true)
+
+            })
+            .catch(error => {
+                alert(error)
+                setIsLoading(false)
+            })
+    }, [])
+
+
+    if (!isLoading) {
+        return (
+            <React.Fragment>
+                <Typography
+                    variant="h7"
+                    align='center'
+                    gutterBottom='true'
+                >
+                    Идет загрузка данных...
+                </Typography>
+                <Loader />
+            </React.Fragment>
+        )
+    }
+    else {
+        return (
+            <React.Fragment>
+                <Typography variant="h5" align='center'  gutterBottom='true' color="primary" className={classes.label}>База данных</Typography>
+                <Table size="small" className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Имя</TableCell>
+                            <TableCell>Фамилия</TableCell>
+                            <TableCell>Email</TableCell>
+                            <TableCell>Root</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <div className={classes.seeMore}>
-                <Link color="primary" href="#" onClick={preventDefault}>
-                    See more orders
-                </Link>
-            </div>
-        </React.Fragment>
-    );
+                    </TableHead>
+                    <TableBody>
+                        {userList.Users.map((row) => (
+                            <TableRow key={row.id}>
+                                <TableCell>{row.first_name}</TableCell>
+                                <TableCell>{row.last_name}</TableCell>
+                                <TableCell>{row.email}</TableCell>
+                                <TableCell>
+                                    {row.is_admin ? 'admin' : 'user'}
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="outlined" color="primary" href="#outlined-buttons" size="small">
+                                        edit
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                <div><br/></div>
+            </React.Fragment>
+        );
+    }
 }
 
 function mapStateToProps(state) {

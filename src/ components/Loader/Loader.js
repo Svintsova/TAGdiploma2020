@@ -1,11 +1,18 @@
 import React from 'react'
-import classes from './Loader.css'
+import './Loader.css'
 
 const Loader = props => (
-  <div className={classes.center}>
-    <div className={classes.Loader}>
-      <div /><div />
-    </div>
+  <div className='center'>
+      <div className='lds-roller'>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
   </div>
 )
 
