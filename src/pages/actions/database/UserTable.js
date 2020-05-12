@@ -12,26 +12,37 @@ import axios from "axios";
 import {connect} from "react-redux";
 import Loader from "../../../ components/Loader/Loader";
 import Button from '@material-ui/core/Button';
+import UserDialog from "../../../ components/userDialog/userDialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
 
 function preventDefault(event) {
     event.preventDefault();
 }
 
 const useStyles = makeStyles((theme) => ({
-    label: {
-    },
     selectEmpty: {
         marginTop: theme.spacing(2),
     },
 }));
 
+
+
+function onDeleteClickHandler (id, token) {
+    console.log('UserID: ', id, token)
+}
+
+
+
 function UserTable(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
     const [userList, setUserList] = useState({})
-
-
-
+    const [open, setOpen] = React.useState(false);
+    const [selectedUser, setSelectedUser] = useState({})
 
 
     useEffect(() => {
@@ -53,7 +64,7 @@ function UserTable(props) {
         return (
             <React.Fragment>
                 <Typography
-                    variant="h7"
+                    variant="h6"
                     align='center'
                     gutterBottom='true'
                 >
@@ -66,7 +77,7 @@ function UserTable(props) {
     else {
         return (
             <React.Fragment>
-                <Typography variant="h5" align='center'  gutterBottom='true' color="primary" className={classes.label}>База данных</Typography>
+                <Typography variant="h5" align='center'  gutterBottom={true} color="primary" >База данных</Typography>
                 <Table size="small" className={classes.table}>
                     <TableHead>
                         <TableRow>
@@ -87,7 +98,24 @@ function UserTable(props) {
                                     {row.is_admin ? 'admin' : 'user'}
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="outlined" color="primary" href="#outlined-buttons" size="small">
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        href="#outlined-buttons"
+                                        size="small"
+                                        onClick={() => {
+                                            setOpen(true)
+                                            setSelectedUser(  {
+                                                    id: row.id,
+                                                    first_name: row.first_name,
+                                                    last_name: row.last_name,
+                                                    is_admin: row.is_admin,
+                                                    token: props.user.token
+                                                }
+                                            )
+                                            console.log(selectedUser)
+                                        }}
+                                    >
                                         edit
                                     </Button>
                                 </TableCell>
@@ -96,6 +124,7 @@ function UserTable(props) {
                     </TableBody>
                 </Table>
                 <div><br/></div>
+                {open ? <UserDialog user={selectedUser} onClose={() => setOpen(false)} /> : null}
             </React.Fragment>
         );
     }

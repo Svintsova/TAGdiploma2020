@@ -8,7 +8,7 @@ import Container from '@material-ui/core/Container';
 import {connect} from "react-redux";
 import {useFormik} from "formik";
 import axios from "axios";
-import Paper from '@material-ui/core/Paper';
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -88,7 +88,6 @@ function Profile(props) {
                         variant="outlined"
                         label="Имя"
                         margin="normal"
-                        multiline
                         required
                         fullWidth
                         onChange={formik.handleChange}
@@ -99,7 +98,6 @@ function Profile(props) {
                         variant="outlined"
                         label="Фамилия"
                         margin="normal"
-                        multiline
                         required
                         fullWidth
                         onChange={formik.handleChange}
@@ -112,7 +110,6 @@ function Profile(props) {
                         fullWidth
                         id="email"
                         label="Email"
-                        multiline
                         disabled
                         autoComplete="email"
                         onChange={formik.handleChange}
@@ -155,7 +152,6 @@ function Profile(props) {
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        multiline
                         required
                         fullWidth
                         label="Новый пароль"

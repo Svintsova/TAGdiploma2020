@@ -24,6 +24,7 @@ function getCookie(name) {
 }
 
 function App(props) {
+
     useEffect(() => {
         let isInit = getCookie('id')
         let isToken = getCookie('token')
