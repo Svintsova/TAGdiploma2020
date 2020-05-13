@@ -1,78 +1,91 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import {Link} from 'react-router-dom'
 import {connect} from "react-redux";
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import UserTable from "./database/UserTable";
+import TakeStepper from "./take/Take";
+import Statistics from "./statistics/Statistics";
 
-const useStyles = makeStyles((theme) => ({
-    cardGrid: {
-        paddingTop: theme.spacing(8),
-        paddingBottom: theme.spacing(8),
-    },
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    cardContent: {
-        flexDirection: 'column',
-        flexGrow: 1,
-    },
-    Button: {
-        paddingTop: theme.spacing(2),
-    },
-    link:{
-          display:"flex",
-            width:'100%',
-        }
-}));
-
-const cards = [
-    {id: 0, root: 'all', title: 'Взять', href: '/database', lid: 'Выбор и бронирование необходимого оборудования.'},
-    {id: 1, root: 'all', title: 'Оставить', href: '/statistics', lid: 'Получи код для доступа к пустой ячейке. Передай код другу для получения.'},
-    {id: 2, root: 'admin', title: 'База данных', href: '/database', lid: 'Просмотр, удаление/добавление, изменение прав доступа.'},
-    {id: 3, root: 'admin', title: 'Статистика', href: '/statistics', lid: 'Просмотр статистики использования оборудования.'},
-];
-
-
-function Actions() {
-    const classes = useStyles();
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
 
     return (
-        <React.Fragment>
-            <CssBaseline />
-            <Container className={classes.cardGrid} maxWidth="md">
-                <Grid container spacing={4}>
-                    {cards.map((card) => (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
 
-                        <Grid item key={card.id} xs={12} sm={6} md={4}>
-                            <Link to={card.href} className={classes.link}>
-                            <Card className={classes.card}>
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
 
-                                    <Button size="large" color="primary" className={classes.Button}>
-                                        <Typography gutterBottom variant="h5" component="h2">
-                                            {card.title}
-                                        </Typography>
-                                    </Button>
-                                <CardContent className={classes.cardContent}>
-                                        <Typography>
-                                        {card.lid}
-                                        </Typography>
-                                </CardContent>
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
 
-                            </Card>
-                            </Link>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Container>
-        </React.Fragment>
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.paper,
+    },
+}));
+
+function Actions(props) {
+    const classes = useStyles();
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    return (
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Tabs value={value} onChange={handleChange}  centered>
+                    <Tab label="Взять" {...a11yProps(0)} />
+                    <Tab label="Оставить" {...a11yProps(1)} />
+                    <Tab label="База данных" {...a11yProps(2)} />
+                    <Tab label="Статистика" {...a11yProps(3)} />
+                </Tabs>
+            </AppBar>
+            <TabPanel value={value} index={0}>
+                <TakeStepper/>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+                Item Two
+            </TabPanel>
+
+                    <TabPanel value={value} index={2}>
+                        <UserTable />
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+
+                    </TabPanel>
+
+        </div>
     );
 }
 
@@ -85,3 +98,9 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(Actions)
+
+
+// {cards.map((card) => (
+//     <Button>{card.title}</Button>
+//
+// ))}

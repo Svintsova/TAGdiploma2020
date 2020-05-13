@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import {useFormik} from "formik";
 import axios from "axios";
 
+
 export default function UserDialog(props) {
     console.log(props)
 
@@ -85,7 +86,7 @@ export default function UserDialog(props) {
                                 required
                                 fullWidth
                                 id="is_admin"
-                                label="Root"
+                                label="Администратор"
                                 value={formik.values.is_admin}
                                 onChange={formik.handleChange}
                             />

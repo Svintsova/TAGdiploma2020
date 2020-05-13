@@ -13,19 +13,21 @@ import {connect} from "react-redux";
 import Loader from "../../../ components/Loader/Loader";
 import Button from '@material-ui/core/Button';
 import UserDialog from "../../../ components/userDialog/userDialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
+import EditIcon from '@material-ui/icons/Edit';
+import Paper from "@material-ui/core/Paper";
+import Container from "@material-ui/core/Container";
 
-function preventDefault(event) {
-    event.preventDefault();
-}
 
 const useStyles = makeStyles((theme) => ({
     selectEmpty: {
         marginTop: theme.spacing(2),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        justifyContent: "center",
     },
 }));
 
@@ -66,25 +68,25 @@ function UserTable(props) {
                 <Typography
                     variant="h6"
                     align='center'
-                    gutterBottom='true'
                 >
                     Идет загрузка данных...
                 </Typography>
-                <Loader />
+              <Loader />
+
             </React.Fragment>
         )
     }
     else {
         return (
-            <React.Fragment>
-                <Typography variant="h5" align='center'  gutterBottom={true} color="primary" >База данных</Typography>
+            <Container className={classes.root} maxWidth="md">
+            <Paper className={classes.paper} >
                 <Table size="small" className={classes.table}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Имя</TableCell>
                             <TableCell>Фамилия</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Root</TableCell>
+                            <TableCell>Почта</TableCell>
+                            <TableCell>Тип</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
@@ -101,7 +103,6 @@ function UserTable(props) {
                                     <Button
                                         variant="outlined"
                                         color="primary"
-                                        href="#outlined-buttons"
                                         size="small"
                                         onClick={() => {
                                             setOpen(true)
@@ -116,16 +117,16 @@ function UserTable(props) {
                                             console.log(selectedUser)
                                         }}
                                     >
-                                        edit
+                                        <EditIcon fontSize='small' color='primary'  />
                                     </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-                <div><br/></div>
                 {open ? <UserDialog user={selectedUser} onClose={() => setOpen(false)} /> : null}
-            </React.Fragment>
+            </Paper>
+            </Container>
         );
     }
 }

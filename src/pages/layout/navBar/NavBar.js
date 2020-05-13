@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import {Link as RouterLink} from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
 import {connect} from "react-redux";
 
 export const useStyles = makeStyles((theme) => ({
@@ -43,29 +43,23 @@ function NavBar(props)  {
                     <RouterLink to="/">TAKE & GO</RouterLink>
                 </Typography>
                 <nav>
-                    <RouterLink to="/dashboard">
-                        <Link variant="button" color="textPrimary" href="/dashboard" className={classes.link}>
+                        <Link variant="button" color="textPrimary" component={RouterLink} to="/dashboard" className={classes.link}>
                         Действия
                         </Link>
-                    </RouterLink>
 
-                    <RouterLink to="/history">
-                        <Link variant="button" color="textPrimary" href="/history" className={classes.link}>
+
+                        <Link variant="button" color="textPrimary" component={RouterLink} to="/history" className={classes.link}>
                             История
                         </Link>
-                    </RouterLink>
 
-                    <RouterLink to="/profile">
-                        <Link variant="button" color="textPrimary" href="/profile" className={classes.link}>
+                        <Link variant="button" color="textPrimary" component={RouterLink} to="/profile" className={classes.link}>
                         Профиль
                         </Link>
-                    </RouterLink>
+
                 </nav>
-                <RouterLink to="/login">
-                    <Button href="#" color="primary" variant="outlined" className={classes.link} onClick={props.logOut}>
+                    <Button component={RouterLink} to="/login" color="primary" variant="outlined" className={classes.link} onClick={props.logOut}>
                     Выход
                     </Button>
-                </RouterLink>
             </Toolbar>
         </AppBar>
 

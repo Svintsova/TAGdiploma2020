@@ -56,8 +56,8 @@ function Profile(props) {
 
     const formikPass = useFormik({
         initialValues: {
-            old_password: null,
-            new_password: null,
+            old_password: "",
+            new_password: "",
             token: props.user.token,
         },
         onSubmit: values => {

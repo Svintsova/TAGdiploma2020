@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Container from '@material-ui/core/Container';
 import {Link} from 'react-router-dom'
 import Card from "../../ components/historyCard/Card";
