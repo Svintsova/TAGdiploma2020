@@ -13,6 +13,7 @@ import Loader from "../../../ components/Loader/Loader";
 import AvailableList from "./AvailableList";
 import Chip from "@material-ui/core/Chip";
 import VpnKeyRoundedIcon from '@material-ui/icons/VpnKeyRounded';
+import AcceptRent from "./AcceptRent";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,22 +42,16 @@ function getSteps() {
 function getStepContent(step) {
     switch (step) {
         case 0:
-            return (<Typography>Выберите оборудование для аренды. Обращаем ваше внимание,
+            return (
+                <Typography>Выберите оборудование для аренды. Обращаем ваше внимание,
             что для бронирования нескольких объектов, вам необходимо получить код на каждый из них.</Typography>);
         case 1:
             return (
-                <React.Fragment>
-                    <Typography>В данный момент доступно следующее оборудование</Typography>
-                    <AvailableList/>
-
-                </React.Fragment>
+                    <AvailableList />
             );
         case 2:
             return (
-                <React.Fragment>
-                    <Typography>Поздравляем, ваше бронирование завершено. Ниже вы найдете код подтверждения,
-                который необходимо ввести при получении и возврате оборудования.</Typography>
-                </React.Fragment>
+                <AcceptRent />
 
             );
 
@@ -65,9 +60,10 @@ function getStepContent(step) {
     }
 }
 
-function TakeStepper() {
+function TakeStepper(props) {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
+    
     const steps = getSteps();
 
     const handleNext = () => {
@@ -76,10 +72,11 @@ function TakeStepper() {
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        props.setStatus(false)
     };
 
     const handleReset = () => {
-        setActiveStep(0);
+        setActiveStep(1);
     };
 
     return (
@@ -89,23 +86,25 @@ function TakeStepper() {
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>
                         <StepContent>
-                            {getStepContent(index)}
+                            {getStepContent(index, setActiveStep)}
                             <div className={classes.actionsContainer}>
                                 <div>
+                                    {activeStep === steps.length - 1 ? null :
                                     <Button
                                         disabled={activeStep === 0}
                                         onClick={handleBack}
                                         className={classes.button}
                                     >
                                         Назад
-                                    </Button>
+                                    </Button> }
                                     <Button
                                         variant="contained"
-                                        color="primary"
-                                        onClick={handleNext}
+                                        color={activeStep === steps.length - 1 ? 'default' : 'primary'}
+                                        onClick={activeStep === steps.length - 1 ? handleReset : handleNext}
                                         className={classes.button}
+                                        disabled={props.isChosen}
                                     >
-                                        {activeStep === steps.length - 1 ? 'Завершить' : 'Далее'}
+                                        {activeStep === steps.length - 1 ? 'Повторить' : 'Далее'}
                                     </Button>
                                 </div>
                             </div>
@@ -113,16 +112,6 @@ function TakeStepper() {
                     </Step>
                 ))}
             </Stepper>
-            {activeStep === steps.length && (
-                <Paper square elevation={0} className={classes.resetContainer}>
-                    <Typography>Поздравляем, ваше бронирование завершено. Ниже вы найдете код подтверждения,
-                        который необходимо ввести при получении и возврате оборудования.</Typography>
-                    <Chip color="secondary" icon={<VpnKeyRoundedIcon />}  label="Код подтверждения: 123456" />
-                    <Button onClick={handleReset} className={classes.button} variant="outlined">
-                        Повторить
-                    </Button>
-                </Paper>
-            )}
         </Container>
     );
 }
@@ -131,8 +120,14 @@ function mapStateToProps(state) {
     return {
         user: state.profile.user,
         loading: state.profile.loading,
-        IsLoaded: state.profile.IsLoaded
+        IsLoaded: state.profile.IsLoaded,
+        item: state.rentItem.item,
+        isChosen: state.rentItem.isChosen,
     }
 }
-
-export default connect(mapStateToProps)(TakeStepper)
+function mapDispatchToProps(dispatch) {
+    return {
+        setStatus: (isChosen) => dispatch({type: 'RENT_STATUS_UPDATE', payload: {isChosen}}),
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TakeStepper)

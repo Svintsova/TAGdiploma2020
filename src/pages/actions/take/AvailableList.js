@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import {connect} from "react-redux";
 import axios from "axios";
 import Loader from "../../../ components/Loader/Loader";
@@ -29,6 +27,7 @@ function AvailableList(props) {
     const [AvailableItems, setAvailableItems] = useState({})
 
     useEffect(() => {
+        props.setStatus(true)
     axios.get(`https://api.noirdjinn.dev/cell/cell_types_available?token=${props.user.token}`)
         .then(result => {
             console.log('List', result);
@@ -58,24 +57,28 @@ function AvailableList(props) {
     }
     else {
     return (
-        <div className={classes.buttonGroup}>
-            {AvailableItems.map((item) => (
-                    <Button
-                        className={classes.button}
-                        key={item.id}
-                        variant= { choice!==item.id ? "outlined" : "outlined"}
-                        color={ choice!==item.id ? "primary" : "secondary"}
-                        size="small"
-                        onClick={() => {
-                            console.log(item.id)
-                            setChoice(item.id)
-                        }}
-                    >
-                        {item.name}
-                    </Button>
+        <React.Fragment>
+            <Typography>В данный момент доступно следующее оборудование</Typography>
+            <div className={classes.buttonGroup}>
+                {AvailableItems.map((item) => (
+                        <Button
+                            className={classes.button}
+                            key={item.id}
+                            variant= { choice!==item.id ? "outlined" : "outlined"}
+                            color={ choice!==item.id ? "primary" : "secondary"}
+                            size="small"
+                            onClick={ () =>{
+                                props.setStatus(false)
+                                props.setRentItem(item)
+                                setChoice(item.id)
+                            }}
+                        >
+                            {item.name}
+                        </Button>
 
-                ))}
-        </div>
+                    ))}
+            </div>
+        </React.Fragment>
     );
 }
 }
@@ -86,8 +89,15 @@ function mapStateToProps(state) {
     return {
         user: state.profile.user,
         loading: state.profile.loading,
-        IsLoaded: state.profile.IsLoaded
+        IsLoaded: state.profile.IsLoaded,
+        item: state.rentItem.item,
+        isChosen: state.rentItem.isChosen,
     }
 }
-
-export default connect(mapStateToProps)(AvailableList)
+function mapDispatchToProps(dispatch) {
+    return {
+        setStatus: (isChosen) => dispatch({type: 'RENT_STATUS_UPDATE', payload: {isChosen}}),
+        setRentItem: (item) => dispatch({type: 'SELECT_ITEM', payload: {item}}),
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(AvailableList)
