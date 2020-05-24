@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box';
 import UserTable from "./database/UserTable";
 import TakeStepper from "./take/Take";
 import Statistics from "./statistics/Statistics";
+import CellStatus from "./cellStatus/CellStatus";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -66,9 +67,10 @@ function Actions(props) {
             <AppBar position="static">
                 <Tabs value={value} onChange={handleChange}  centered>
                     <Tab label="Взять" {...a11yProps(0)} />
-                    <Tab label="Оставить" {...a11yProps(1)} />
+                    <Tab label="Вернуть" {...a11yProps(1)} />
                     <Tab label="База данных" {...a11yProps(2)} />
                     <Tab label="Статистика" {...a11yProps(3)} />
+                    <Tab label="Состояние ячеек" {...a11yProps(4)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -84,6 +86,9 @@ function Actions(props) {
                     <TabPanel value={value} index={3}>
 
                     </TabPanel>
+            <TabPanel value={value} index={4}>
+                <CellStatus />
+            </TabPanel>
 
         </div>
     );
