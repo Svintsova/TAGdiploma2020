@@ -12,6 +12,7 @@ import LaptopMacIcon from '@material-ui/icons/LaptopMac';
 import DescriptionIcon from '@material-ui/icons/Description';
 import Container from "@material-ui/core/Container";
 
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,6 +29,13 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
         background: theme.palette.error.light,
+    },
+    typography: {
+        padding: theme.spacing(2),
+    },
+    buttonWidth: {
+        minWidth: '58px',
+        boxSizing: "border-box"
     },
 }));
 
@@ -67,7 +75,19 @@ export default function FullWidthGrid() {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
     const [cellList, setCellList] = useState({})
-    const [open, setOpen] = React.useState(false);
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
 
 
     useEffect(() => {
@@ -107,14 +127,28 @@ export default function FullWidthGrid() {
                 <Grid container spacing={3}>
                     {cellList["Cells:"].map((cell,index) => (
                         <Grid item xs={6} sm={3} key={cell.id}>
-                            <Paper
+                            {/*<Paper*/}
 
-                                className={cell.is_taken ? classes.paperBusy : classes.paperFree }
+                            {/*    className={cell.is_taken ? classes.paperBusy : classes.paperFree }*/}
+                            {/*>*/}
+
+                            {/*    <Typography> № {cell.id} </Typography>*/}
+                            {/*    {cellIcon(cell.cell_type_id)}*/}
+                            {/*</Paper>*/}
+
+
+                            <Button
+                                aria-describedby={cell.id}
+                                variant="outlined"
+                                color={cell.is_taken ? "secondary" : "primary" }
+                                onClick={handleClick}
+                                startIcon={cellIcon(cell.cell_type_id)}
+
                             >
+                                № {cell.id}
+                            </Button>
 
-                                <Typography> № {cell.id} </Typography>
-                                {cellIcon(cell.cell_type_id)}
-                            </Paper>
+
                         </Grid>
                     ))}
                 </Grid>
