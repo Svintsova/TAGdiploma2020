@@ -94,7 +94,6 @@ export default function FullWidthGrid() {
         axios.get(`https://api.noirdjinn.dev/cell/statuses`)
             .then(result => {
                 setCellList(result.data)
-                console.log(result.data)
                 setIsLoading(true)
 
 
@@ -104,8 +103,6 @@ export default function FullWidthGrid() {
                 setIsLoading(true)
             })
     }, [])
-
-    console.log('list cell ',cellList)
 
     if (!isLoading) {
         return (
@@ -125,7 +122,7 @@ export default function FullWidthGrid() {
         return (
             <Container component="main" maxWidth="md">
                 <Grid container spacing={3}>
-                    {cellList["Cells:"].map((cell,index) => (
+                    {cellList.map((cell,index) => (
                         <Grid item xs={6} sm={3} key={cell.id}>
                             {/*<Paper*/}
 

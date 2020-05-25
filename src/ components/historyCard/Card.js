@@ -15,13 +15,15 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        borderLeft: "10px solid green",
+        borderLeft: "10px solid",
+        borderLeftColor: theme.palette.primary.main,
     },
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        borderLeft: "10px solid green",
+        borderLeft: "10px solid",
+        borderLeftColor: theme.palette.secondary.main,
 
     },
 }));
@@ -56,14 +58,14 @@ function getTime(time) {
 
 }
 
-export default function Actions({type, start, cell, token}) {
+export default function Actions({type, start, cell, token,is_returned}) {
     const classes = useStyles();
 
 
         return (
             <div className={classes.root}>
                 <Paper
-                    className={classes.paper}
+                    className={is_returned ? classes.paperFinish : classes.paper}
                 >
                     <Grid container spacing={4}>
                             <Grid item xs={6} sm={3}>

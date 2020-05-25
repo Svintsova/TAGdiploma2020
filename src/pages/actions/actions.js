@@ -13,6 +13,7 @@ import UserTable from "./database/UserTable";
 import TakeStepper from "./take/Take";
 import Statistics from "./statistics/Statistics";
 import CellStatus from "./cellStatus/CellStatus";
+import CloseCell from "./closeCell/CloseCell";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -21,7 +22,7 @@ function TabPanel(props) {
         <div
             role="tabpanel"
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
+            id={`scrollable-auto-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
@@ -43,7 +44,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        'aria-controls': `scrollable-auto-tabpanel-${index}`,
     };
 }
 
@@ -65,31 +66,38 @@ function Actions(props) {
     return (
         <div className={classes.root}>
             <AppBar position="static">
-                <Tabs value={value} onChange={handleChange}  centered>
+                <Tabs
+                    value={value}
+                    variant="scrollable"
+                    scrollButtons="auto"
+
+                    onChange={handleChange}
+                    //centered
+                >
                     <Tab label="Взять" {...a11yProps(0)} />
                     <Tab label="Вернуть" {...a11yProps(1)} />
-                    <Tab label="База данных" {...a11yProps(2)} />
-                    <Tab label="Статистика" {...a11yProps(3)} />
-                    <Tab label="Состояние ячеек" {...a11yProps(4)} />
+                    { props.user.is_admin ? <Tab label="База данных" {...a11yProps(2)} /> : null}
+                    { props.user.is_admin ? <Tab label="Статистика" {...a11yProps(3)} /> : null}
+                    { props.user.is_admin ? <Tab label="Состояние ячеек" {...a11yProps(4)} /> : null}
+
+
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
                 <TakeStepper/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
+                <CloseCell />
             </TabPanel>
-
-                    <TabPanel value={value} index={2}>
-                        <UserTable />
-                    </TabPanel>
-                    <TabPanel value={value} index={3}>
-
-                    </TabPanel>
+            <TabPanel value={value} index={2}>
+                <UserTable />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                    Статистика
+            </TabPanel>
             <TabPanel value={value} index={4}>
                 <CellStatus />
             </TabPanel>
-
         </div>
     );
 }
@@ -104,8 +112,3 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(Actions)
 
-
-// {cards.map((card) => (
-//     <Button>{card.title}</Button>
-//
-// ))}

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {connect} from "react-redux";
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
@@ -8,7 +7,9 @@ import Chip from "@material-ui/core/Chip";
 import VpnKeyRoundedIcon from "@material-ui/icons/VpnKeyRounded";
 import Paper from "@material-ui/core/Paper";
 import WidgetsIcon from '@material-ui/icons/Widgets';
-
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Box from "@material-ui/core/Box";
 
 function AcceptRent(props) {
     const [isLoading, setIsLoading] = useState(false)
@@ -64,9 +65,12 @@ function AcceptRent(props) {
         }
         else {
             return (
-                <Paper square elevation={0} >
-                    <Typography>Поздравляем, ваше бронирование завершено. Ниже вы найдете код подтверждения,
+                <Box>
+                    <CardContent>
+                        <Typography>Поздравляем, ваше бронирование завершено. Ниже вы найдете код подтверждения,
                         который необходимо ввести при получении и возврате оборудования.</Typography>
+                    </CardContent>
+                    <CardActions>
                     <Chip
                         color="secondary"
                         icon={<VpnKeyRoundedIcon />}
@@ -77,7 +81,8 @@ function AcceptRent(props) {
                         icon={<WidgetsIcon />}
                         label={`Номер ячейки: ${rentResult.cell}`}
                     />
-                </Paper>
+                        </CardActions>
+                </Box>
             );
         }
     }
