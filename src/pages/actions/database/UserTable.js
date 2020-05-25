@@ -139,8 +139,4 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(UserTable)
+export default connect(mapStateToProps)(UserTable)

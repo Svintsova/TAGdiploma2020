@@ -13,6 +13,7 @@ import {Link as RouterLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
 import {useFormik} from "formik";
 import {connect} from "react-redux";
+import {Alert} from "@material-ui/lab";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 function SignUp(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
-
+    const [alertError,setAlertError] = useState("no")
 
     const validate = values => {
         const errors = {};
@@ -82,25 +83,29 @@ function SignUp(props) {
         onSubmit: values => {
             setIsLoading(true)
             alert(JSON.stringify(values, null, 2));
-            const response = axios.post('https://api.noirdjinn.dev/user/new', values)
-                .then(result => {
-                    alert(response)
-                    let user_id = result.data.user_id
-                    let user_token = result.data.access_token
-                    document.cookie = 'Max-Age=3600; id='+encodeURIComponent(user_id)
-                    document.cookie = 'path=/; Max-Age=3600'
-                    document.cookie = 'Max-Age=3600; token='+encodeURIComponent(user_token)
-                    props.userUpdate(
-                        result.data.id,
-                        result.data.access_token,
-                        formik.values.name,
-                        formik.values.surname,
-                        formik.values.email)
-                    setIsLoading('done')
+            axios.post('https://api.noirdjinn.dev/user/new', values)
+                .then(response => {
+                    axios.post(`https://api.noirdjinn.dev/user/authenticate?email=${values.email}&password=${values.password}`)
+                        .then(result => {
+//cookie
+                            let user_id = result.data.user_id
+                            let user_token = result.data.access_token
+                            document.cookie = 'id='+encodeURIComponent(user_id)+'; max-age=3600;'
+                            document.cookie = 'path=/; max-age=3600;'
+                            document.cookie = 'token='+encodeURIComponent(user_token)+'; max-age=3600;'
+
+                            props.userUpdate(
+                                user_id,
+                                user_token,
+                                formik.values.name,
+                                formik.values.surname,
+                                formik.values.email)
+                            setIsLoading('done')
+                        })
 
                 })
                 .catch(error => {
-                    alert("PIZDEC")
+                    setAlertError(`При регистрации произошла ошибка: ${error.response.data.err}`)
                     setIsLoading(false)
                 })
 
@@ -110,7 +115,9 @@ function SignUp(props) {
 
     return isLoading==='done' ? <Redirect to="/" /> :
     (
-        <Container component="main" maxWidth="xs">
+        <React.Fragment>
+            {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
+            <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -200,6 +207,7 @@ function SignUp(props) {
                 </form>
             </div>
         </Container>
+     </React.Fragment>
     );
 }
 

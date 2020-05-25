@@ -5,14 +5,10 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Container from "@material-ui/core/Container";
 import {connect} from "react-redux";
-import Loader from "../../../ components/Loader/Loader";
 import AvailableList from "./AvailableList";
-import Chip from "@material-ui/core/Chip";
-import VpnKeyRoundedIcon from '@material-ui/icons/VpnKeyRounded';
 import AcceptRent from "./AcceptRent";
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +72,7 @@ function TakeStepper(props) {
     };
 
     const handleReset = () => {
-        setActiveStep(1);
+        setActiveStep(0);
     };
 
     return (

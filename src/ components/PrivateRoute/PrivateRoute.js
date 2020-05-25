@@ -5,7 +5,6 @@ import {Redirect, Route, RouteComponentProps, RouteProps} from 'react-router';
 
 const PrivateRoute = ({ component, admin, user, ...rest }) => {
     let renderer = null;
-    console.log('PRIVET',{ component, admin, user, ...rest })
     if (!user) {
         const backPath = btoa(window.location.pathname + window.location.search);
         renderer = () => <Redirect to={`/login?to=${backPath}`} />

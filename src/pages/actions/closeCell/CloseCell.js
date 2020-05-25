@@ -1,18 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
-import MouseIcon from '@material-ui/icons/Mouse';
-import KeyboardIcon from '@material-ui/icons/Keyboard';
-import CreateIcon from '@material-ui/icons/Create';
-import LaptopMacIcon from '@material-ui/icons/LaptopMac';
-import DescriptionIcon from '@material-ui/icons/Description';
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import {useFormik} from "formik";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
-
+import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,55 +23,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-function cellIcon(cell_type) {
-    switch (cell_type) {
-        case 1:
-            return (
-                <LaptopMacIcon />
-            );
-        case 2:
-            return (
-                <DescriptionIcon />
-
-            );
-        case 3:
-            return (
-                <MouseIcon />
-
-            );
-        case 4:
-            return (
-                <KeyboardIcon />
-
-            );
-        case 5:
-            return (
-                <CreateIcon />
-
-            );
-        default:
-            return 'Unknown';
-    }
-
-}
-export default function FullWidthGrid() {
+export default function CloseCell() {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
+    const [alertError,setAlertError] = useState("no")
 
     const formikTake = useFormik({
         initialValues: {
             take_code: "",
         },
-        onSubmit: values => {
+        onSubmit: (values, actions) => {
             setIsLoading(true)
             axios.post(`https://api.noirdjinn.dev/lease/take_equipment?code=${values.take_code}`)
                 .then(result => {
                     setIsLoading(false)
+                    actions.resetForm()
                 })
                 .catch(error => {
-                    console.log("произошла ошибка:", error)
                     setIsLoading(false)
+                    setAlertError(`При попытке взять оборудование произошла ошибка: ${error.response.data.err}`)
                 })
 
         },
@@ -86,19 +51,22 @@ export default function FullWidthGrid() {
         initialValues: {
             return_code: "",
         },
-        onSubmit: values => {
+        onSubmit: (values, actions) => {
             setIsLoading(true)
             axios.post(`https://api.noirdjinn.dev/lease/return_equipment?code=${values.return_code}`)
                 .then(result => {
                     setIsLoading(false)
+                    actions.resetForm()
                 })
                 .catch(error => {
-                    console.log("произошла ошибка:", error)
+                    setAlertError(`При возврате произошла ошибка: ${error.response.data.err}`)
                     setIsLoading(false)
                 })
         },
     });
         return (
+            <React.Fragment>
+            {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
             <Container component="main" maxWidth="xs" >
                 <CssBaseline />
                 <div className={classes.paper}  >
@@ -154,12 +122,14 @@ export default function FullWidthGrid() {
                             className={classes.submit}
                             disabled={isLoading}
 
+
                         >
                             Вернуть
                         </Button>
                     </form>
                 </div>
             </Container>
+                </React.Fragment>
         );
 
 }

@@ -59,17 +59,17 @@ function SignIn(props) {
         validate,
         onSubmit: values => {
             setIsLoading(true)
-            const response = axios.post(`https://api.noirdjinn.dev/user/authenticate?email=${values.email}&password=${values.password}`)
+            axios.post(`https://api.noirdjinn.dev/user/authenticate?email=${values.email}&password=${values.password}`)
                 .then(result => {
 //cookies
                     let user_id = result.data.user_id
                     let user_token = result.data.access_token
-                    document.cookie = 'id='+encodeURIComponent(user_id)
-                    document.cookie = 'path=/; max-age=3600'
-                    document.cookie = 'token='+encodeURIComponent(user_token)
+                    document.cookie = 'id='+encodeURIComponent(user_id)+'; max-age=3600;'
+                    document.cookie = 'path=/; max-age=3600;'
+                    document.cookie = 'token='+encodeURIComponent(user_token)+'; max-age=3600;'
 
 
-                    const info = axios.get(`https://api.noirdjinn.dev/user/id/${user_id}?token=${user_token}`)
+                    axios.get(`https://api.noirdjinn.dev/user/id/${user_id}?token=${user_token}`)
                         .then(userInfo => {
                             props.userUpdate(
                                 userInfo.data.id,

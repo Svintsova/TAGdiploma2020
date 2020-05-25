@@ -76,7 +76,7 @@ function Actions(props) {
                 >
                     <Tab label="Взять" {...a11yProps(0)} />
                     <Tab label="Вернуть" {...a11yProps(1)} />
-                    { props.user.is_admin ? <Tab label="База данных" {...a11yProps(2)} /> : null}
+                    { props.user.is_admin ? <Tab label="Пользователи" {...a11yProps(2)} /> : null}
                     { props.user.is_admin ? <Tab label="Статистика" {...a11yProps(3)} /> : null}
                     { props.user.is_admin ? <Tab label="Состояние ячеек" {...a11yProps(4)} /> : null}
 

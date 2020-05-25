@@ -46,7 +46,6 @@ function App(props) {
         }
          else {props.changeLoaded()}
     }, [])
-    console.log( 'меня вызвал вова ',props.user,props.IsLoaded)
 
     if (!props.IsLoaded) {
         return null
@@ -60,12 +59,13 @@ function App(props) {
                 <Route exact path="/login" exact component={Login}/>
                 <Route exact path="/sign-up" component={SignUp}/>
                 <Layout>
-                <PrivateRoute exact path="/" component={Home} />
                 <PrivateRoute exact path="/dashboard" component={Actions} />
                 <PrivateRoute exact path="/history" component={History} />
                 <PrivateRoute exact path="/profile" component={Profile} />
                 <PrivateRoute exact admin path="/database" component={Database} />
+                <PrivateRoute exact path="/" component={Home} />
                 </Layout>
+
               </Switch>
                 <Box mt={8}>
                     <Copyright />

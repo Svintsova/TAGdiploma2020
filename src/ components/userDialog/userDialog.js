@@ -20,7 +20,7 @@ export default function UserDialog(props) {
             id: props.user.id,
             is_admin: props.user.is_admin,
         },
-        onSubmit: values => {
+        onSubmit: (values, actions) => {
             if (formik.values.name!==props.user.first_name || formik.values.surname!==props.user.last_name) {
                 axios.post(`https://api.noirdjinn.dev/user/update_info?token=${props.user.token}`, values)
                     .then(result => {

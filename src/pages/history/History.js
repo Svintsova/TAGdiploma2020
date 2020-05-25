@@ -9,6 +9,7 @@ import axios from "axios";
 import {connect} from "react-redux";
 import Loader from "../../ components/Loader/Loader";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     cardGrid: {
@@ -85,6 +86,7 @@ function History(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [leasesList, setLeasesList] = useState([])
     const [showList, setShowList] = useState("all")
+    const [alertError,setAlertError] = useState("no")
 
     useEffect(() => {
         axios.get(`https://api.noirdjinn.dev/lease/leases_by_user?token=${props.user.token}&with_closed=true`)
@@ -94,7 +96,7 @@ function History(props) {
                 setIsLoading(true)
             })
             .catch(error => {
-                console.log("Произошла ошибка:", error)
+                setAlertError(error.response.data.err)
                 setIsLoading(true)
             })
     }, [])
@@ -117,6 +119,7 @@ function History(props) {
         if (leasesList.length === 0) {
             return (
                 <React.Fragment>
+                    {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
                     <Typography
                         className={classes.cardGrid}
                         variant="h6"

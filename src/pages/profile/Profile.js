@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import {connect} from "react-redux";
 import {useFormik} from "formik";
 import axios from "axios";
+import {Alert} from "@material-ui/lab";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 function Profile(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
+    const [alertError,setAlertError] = useState("no")
 
     const formik = useFormik({
         initialValues: {
@@ -36,19 +38,20 @@ function Profile(props) {
             surname:props.user.surname,
             id: props.user.id
         },
-        onSubmit: values => {
+        onSubmit: (values, actions) => {
             setIsLoading(true)
-            const response = axios.post(`https://api.noirdjinn.dev/user/update_info?token=${props.user.token}`, values)
+            setAlertError('no')
+            axios.post(`https://api.noirdjinn.dev/user/update_info?token=${props.user.token}`, values)
                 .then(result => {
-                    console.log('User was update', result);
                     props.profileUpdate(result.data.first_name,result.data.last_name)
                     setIsLoading(false)
                     axios.post(`https://api.noirdjinn.dev/user/make_admin?id=${props.user.id}&token=${props.user.token}&is_admin=true`)
                     props.changeAdmin(true)
                 })
                 .catch(error => {
-                    console.log("При обновлении профиля произошла ошибка:", error)
+                    setAlertError(`При обновлении информации произошла ошибка: ${error.response.data.err}`)
                     setIsLoading(false)
+                    actions.resetForm()
                 })
 
         },
@@ -60,22 +63,26 @@ function Profile(props) {
             new_password: "",
             token: props.user.token,
         },
-        onSubmit: values => {
+        onSubmit: (values, actions) => {
             setIsLoading(true)
-            const response = axios.post(`https://api.noirdjinn.dev/user/update_password?token=${values.token}&old_password=${values.old_password}&new_password=${values.new_password}`)
+            setAlertError('no')
+            axios.post(`https://api.noirdjinn.dev/user/update_password?token=${values.token}&old_password=${values.old_password}&new_password=${values.new_password}`)
                 .then(result => {
                     setIsLoading(false)
+                    actions.resetForm()
                 })
                 .catch(error => {
-                    console.log("При смене пароля произошла ошибка", error)
+                    setAlertError(`При обновлении пароля произошла ошибка: ${error.response.data.err}`)
                     setIsLoading(false)
+                    actions.resetForm()
                 })
 
-            console.log(response.data)
         },
     });
 
     return (
+        <React.Fragment>
+            {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}  >
@@ -139,7 +146,6 @@ function Profile(props) {
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        multiline
                         required
                         fullWidth
                         label="Текущий пароль"
@@ -175,6 +181,7 @@ function Profile(props) {
             </div>
 
         </Container>
+        </React.Fragment>
     );
 }
 

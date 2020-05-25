@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { withStyles, makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
@@ -11,24 +10,13 @@ import CreateIcon from '@material-ui/icons/Create';
 import LaptopMacIcon from '@material-ui/icons/LaptopMac';
 import DescriptionIcon from '@material-ui/icons/Description';
 import Container from "@material-ui/core/Container";
-
 import Button from '@material-ui/core/Button';
+import CellDialog from "../../../ components/cellDialog/CellDialog";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-    },
-    paperFree: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        background: theme.palette.success.light,
-    },
-    paperBusy: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        background: theme.palette.error.light,
     },
     typography: {
         padding: theme.spacing(2),
@@ -38,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         boxSizing: "border-box"
     },
 }));
+
 
 
 function cellIcon(cell_type) {
@@ -71,23 +60,11 @@ function cellIcon(cell_type) {
     }
 
 }
-export default function FullWidthGrid() {
-    const classes = useStyles();
+function CellStatus(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [cellList, setCellList] = useState({})
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+    const [open, setOpen] = React.useState(false);
+    const [selectedCell, setSelectedCell] = useState({})
 
 
     useEffect(() => {
@@ -124,22 +101,16 @@ export default function FullWidthGrid() {
                 <Grid container spacing={3}>
                     {cellList.map((cell,index) => (
                         <Grid item xs={6} sm={3} key={cell.id}>
-                            {/*<Paper*/}
-
-                            {/*    className={cell.is_taken ? classes.paperBusy : classes.paperFree }*/}
-                            {/*>*/}
-
-                            {/*    <Typography> № {cell.id} </Typography>*/}
-                            {/*    {cellIcon(cell.cell_type_id)}*/}
-                            {/*</Paper>*/}
-
-
                             <Button
                                 aria-describedby={cell.id}
                                 variant="outlined"
-                                color={cell.is_taken ? "secondary" : "primary" }
-                                onClick={handleClick}
+                                color={!cell.is_taken ? "primary" : cell.is_empty ? "secondary" : "default"}
                                 startIcon={cellIcon(cell.cell_type_id)}
+                                onClick={() => {
+                                    setOpen(true)
+                                    setSelectedCell(cell)
+                                    console.log(selectedCell)
+                                }}
 
                             >
                                 № {cell.id}
@@ -149,7 +120,17 @@ export default function FullWidthGrid() {
                         </Grid>
                     ))}
                 </Grid>
+                {open ? <CellDialog token={props.user.token} cell={selectedCell} onClose={() => setOpen(false)} /> : null}
             </Container>
         );
     }
 }
+
+
+function mapStateToProps(state) {
+    return {
+        user: state.profile.user,
+    }
+}
+
+export default connect(mapStateToProps)(CellStatus)
