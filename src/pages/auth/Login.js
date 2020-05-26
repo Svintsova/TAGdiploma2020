@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import {useFormik} from "formik";
 import axios from 'axios'
 import {connect} from "react-redux";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -40,7 +41,7 @@ function SignIn(props) {
     console.log(props)
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
-
+    const [alertError,setAlertError] = useState("no")
     const validate = values => {
         const errors = {};
         if (!values.email) {
@@ -55,6 +56,7 @@ function SignIn(props) {
         initialValues: {
             email: '',
             password: '',
+            remember: false,
         },
         validate,
         onSubmit: values => {
@@ -64,10 +66,11 @@ function SignIn(props) {
 //cookies
                     let user_id = result.data.user_id
                     let user_token = result.data.access_token
-                    document.cookie = 'id='+encodeURIComponent(user_id)+'; max-age=3600;'
                     document.cookie = 'path=/; max-age=3600;'
-                    document.cookie = 'token='+encodeURIComponent(user_token)+'; max-age=3600;'
-
+                    if (values.remember) {
+                        document.cookie = 'id=' + encodeURIComponent(user_id) + '; max-age=86400;'
+                        document.cookie = 'token=' + encodeURIComponent(user_token) + '; max-age=86400;'
+                    }
 
                     axios.get(`https://api.noirdjinn.dev/user/id/${user_id}?token=${user_token}`)
                         .then(userInfo => {
@@ -79,14 +82,14 @@ function SignIn(props) {
                                 userInfo.data.email,
                                 userInfo.data.is_admin)
                             setIsLoading('done')
-                            console.log('get user из Login.js ', userInfo)
                         })
 
 
                 })
                 .catch(error => {
-                    alert("Ошибка, попробуйте ввести новые данные")
+                    setAlertError(`При попытке пойти произошла ошибка: ${error.response.data.err}`)
                     setIsLoading(false)
+
                 })
 
         },
@@ -94,7 +97,9 @@ function SignIn(props) {
 
     return isLoading==='done'||props.user? <Redirect to="/" />:
         (
-        <Container component="main" maxWidth="xs">
+            <React.Fragment>
+                {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
+                <Container component="main" maxWidth="xs">
             <CssBaseline />
 
             <div className={classes.paper}>
@@ -133,7 +138,7 @@ function SignIn(props) {
                         value={formik.values.password}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox name="remember" id="remember" value={formik.values.remember} onChange={formik.handleChange} color="primary" />}
                         label="Remember me"
                     />
                         <Button
@@ -148,9 +153,7 @@ function SignIn(props) {
                         </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
+
                         </Grid>
                         <Grid item>
                             <RouterLink to='/sign-up'><Link href="#" variant="body2">
@@ -162,6 +165,7 @@ function SignIn(props) {
             </div>
 
         </Container>
+                </React.Fragment>
     );
 }
 

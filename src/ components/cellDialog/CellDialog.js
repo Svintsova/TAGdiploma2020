@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
         top: theme.spacing(1),
         color: theme.palette.grey[500],
     },
+    spaceBottom: {
+        paddingBottom: theme.spacing(4),
+    },
 }));
 
 function getData(time) {
@@ -105,7 +108,7 @@ export default function CellDialog(props) {
                         <CloseIcon />
                     </IconButton>
                     </DialogTitle>
-                    <DialogContent style={{paddingBottom: '20px'}}>
+                    <DialogContent className={classes.spaceBottom}>
                         <Table size="medium">
                             <TableHead>
                                 <TableRow>

@@ -69,6 +69,7 @@ function Statistics(props) {
     const [cellList, setCellList] = useState({})
     const [stat, setStat] = useState({})
     const [userGrowth, setUserGrowth] = useState({})
+    const [leasesGrowth, setLeasesGrowth] = useState({})
     const [leasesByType, setLeasesByType] = useState({})
     const [equipmentFreeRatio, setEquipmentFreeRatio] = useState({})
     const [leasesByTypeAndDate, setLeasesByTypeAndDate] = useState({})
@@ -80,6 +81,7 @@ function Statistics(props) {
                 setStat(result.data)
                 setIsLoading(true)
                 setUserGrowth(result.data.user_growth_by_date)
+                setLeasesGrowth(result.data.lease_growth_by_date)
                 setLeasesByType(result.data.leases_by_type)
                 setEquipmentFreeRatio(result.data.equipment_free_ratio)
                 setLeasesByTypeAndDate(result.data.leases_by_type_and_date)
@@ -92,51 +94,6 @@ function Statistics(props) {
     }, [])
 
     const colors = ['#4791db','#e33371','#ffb74d','#64b5f6','#81c784']
-
-    const data = [
-        {
-            "name": "Page A",
-            "uv": 4000,
-            "pv": 2400,
-            "amt": 2400
-        },
-        {
-            "name": "Page B",
-            "uv": 3000,
-            "pv": 1398,
-            "amt": 2210
-        },
-        {
-            "name": "Page C",
-            "uv": 2000,
-            "pv": 9800,
-            "amt": 2290
-        },
-        {
-            "name": "Page D",
-            "uv": 2780,
-            "pv": 3908,
-            "amt": 2000
-        },
-        {
-            "name": "Page E",
-            "uv": 1890,
-            "pv": 4800,
-            "amt": 2181
-        },
-        {
-            "name": "Page F",
-            "uv": 2390,
-            "pv": 3800,
-            "amt": 2500
-        },
-        {
-            "name": "Page G",
-            "uv": 3490,
-            "pv": 4300,
-            "amt": 2100
-        }
-    ]
 
     if (!isLoading) {
         return (
@@ -177,15 +134,14 @@ function Statistics(props) {
                         <Typography component="h1" variant="h5" className={classes.typography}>
                             Количество бронирований
                         </Typography>
-                        <LineChart width={730} height={250} data={leasesByTypeAndDate}
+                        <LineChart width={730} height={250} data={leasesGrowth}
                                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="date" />
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Line type="monotone" dataKey="count" stroke="#8884d8" />
-                            <Line type="monotone" dataKey="count" stroke="#ffb74d" />
+                            <Line type="monotone" dataKey="count" stroke="#ffb74d" name='Количество аренд'/>
                         </LineChart>
                     </Paper>
                 </Grid>
@@ -222,7 +178,7 @@ function Statistics(props) {
                             <YAxis dataKey="count"/>
                             <Tooltip/>
                             <Legend />
-                            <Bar name="Количество аренд" dataKey="count" fill="#3f51b5" />
+                            <Bar name="Количество аренд" dataKey="count" fill="#e33371" />
                         </BarChart>
                     </Paper>
                 </Grid>

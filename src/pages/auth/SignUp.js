@@ -90,9 +90,9 @@ function SignUp(props) {
 //cookie
                             let user_id = result.data.user_id
                             let user_token = result.data.access_token
-                            document.cookie = 'id='+encodeURIComponent(user_id)+'; max-age=3600;'
+                            // document.cookie = 'id='+encodeURIComponent(user_id)+'; max-age=3600;'
                             document.cookie = 'path=/; max-age=3600;'
-                            document.cookie = 'token='+encodeURIComponent(user_token)+'; max-age=3600;'
+                          //  document.cookie = 'token='+encodeURIComponent(user_token)+'; max-age=3600;'
 
                             props.userUpdate(
                                 user_id,
@@ -109,7 +109,6 @@ function SignUp(props) {
                     setIsLoading(false)
                 })
 
-            console.log(props)
         },
     });
 

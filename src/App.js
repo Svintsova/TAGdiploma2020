@@ -36,7 +36,8 @@ function App(props) {
                         isToken,
                         userInfo.data.first_name,
                         userInfo.data.last_name,
-                        userInfo.data.email)
+                        userInfo.data.email,
+                        userInfo.data.is_admin)
                     props.changeLoaded()
                     console.log('UserInfo', userInfo)
                 })
@@ -87,7 +88,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userUpdate: (id,token,name,surname,email) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email}}),
+        userUpdate: (id,token,name,surname,email,is_admin) => dispatch({type: 'USER_UPDATE', payload: { id,token,name,surname,email,is_admin}}),
         changeLoaded: () =>  dispatch({type: 'SET_LOADED'})
     }
 }

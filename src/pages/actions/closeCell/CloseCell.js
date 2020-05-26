@@ -34,6 +34,7 @@ export default function CloseCell() {
         },
         onSubmit: (values, actions) => {
             setIsLoading(true)
+            setAlertError('no')
             axios.post(`https://api.noirdjinn.dev/lease/take_equipment?code=${values.take_code}`)
                 .then(result => {
                     setIsLoading(false)
@@ -42,6 +43,7 @@ export default function CloseCell() {
                 .catch(error => {
                     setIsLoading(false)
                     setAlertError(`При попытке взять оборудование произошла ошибка: ${error.response.data.err}`)
+                    actions.resetForm()
                 })
 
         },
@@ -53,6 +55,7 @@ export default function CloseCell() {
         },
         onSubmit: (values, actions) => {
             setIsLoading(true)
+            setAlertError('no')
             axios.post(`https://api.noirdjinn.dev/lease/return_equipment?code=${values.return_code}`)
                 .then(result => {
                     setIsLoading(false)
@@ -61,6 +64,7 @@ export default function CloseCell() {
                 .catch(error => {
                     setAlertError(`При возврате произошла ошибка: ${error.response.data.err}`)
                     setIsLoading(false)
+                    actions.resetForm()
                 })
         },
     });
