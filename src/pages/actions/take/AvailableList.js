@@ -28,7 +28,7 @@ function AvailableList(props) {
 
     useEffect(() => {
         props.setStatus(true)
-        axios.get(`https://api.noirdjinn.dev/cell/cell_types_available?token=${props.user.token}`)
+        axios.get(`https://api.noirdjinn.dev/cell/current_free_types?token=${props.user.token}`)
         .then(result => {
             console.log('List', result);
             setAvailableItems(result.data)

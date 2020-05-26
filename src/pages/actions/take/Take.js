@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -62,6 +62,10 @@ function TakeStepper(props) {
     
     const steps = getSteps();
 
+    useEffect(() => {
+        props.setStatus(false)
+    }, [])
+
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -72,7 +76,7 @@ function TakeStepper(props) {
     };
 
     const handleReset = () => {
-        setActiveStep(0);
+        setActiveStep(1);
     };
 
     return (

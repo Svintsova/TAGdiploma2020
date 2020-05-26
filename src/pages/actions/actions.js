@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {Link} from 'react-router-dom'
 import {connect} from "react-redux";
@@ -14,6 +14,7 @@ import TakeStepper from "./take/Take";
 import Statistics from "./statistics/Statistics";
 import CellStatus from "./cellStatus/CellStatus";
 import CloseCell from "./closeCell/CloseCell";
+import axios from "axios";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -59,6 +60,7 @@ function Actions(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -93,7 +95,7 @@ function Actions(props) {
                 <UserTable />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                    Статистика
+                    <Statistics />
             </TabPanel>
             <TabPanel value={value} index={4}>
                 <CellStatus />
