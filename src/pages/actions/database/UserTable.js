@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,7 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import {useFormik} from "formik";
 import axios from "axios";
 import {connect} from "react-redux";
 import Loader from "../../../ components/Loader/Loader";
@@ -16,6 +14,7 @@ import UserDialog from "../../../ components/userDialog/userDialog";
 import EditIcon from '@material-ui/icons/Edit';
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
+import {Alert} from "@material-ui/lab";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,31 +31,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-function onDeleteClickHandler (id, token) {
-    console.log('UserID: ', id, token)
-}
-
-
-
 function UserTable(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
     const [userList, setUserList] = useState({})
     const [open, setOpen] = React.useState(false);
     const [selectedUser, setSelectedUser] = useState({})
-
+    const [alertError,setAlertError] = useState("no")
 
     useEffect(() => {
         axios.get(`https://api.noirdjinn.dev/user/all?token=${props.user.token}`)
             .then(result => {
                 setUserList(result.data)
-                console.log(result.data)
                 setIsLoading(true)
 
             })
             .catch(error => {
-                alert(error)
+                setAlertError(`При загрузке произошла ошибка: ${error.response.data.err}`)
                 setIsLoading(false)
             })
     }, [])
@@ -78,7 +69,9 @@ function UserTable(props) {
     }
     else {
         return (
-            <Container className={classes.root} maxWidth="md">
+            <React.Fragment>
+                {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
+                <Container className={classes.root} maxWidth="md">
             <Paper className={classes.paper} >
                 <Table size="small" className={classes.table}>
                     <TableHead>
@@ -114,7 +107,6 @@ function UserTable(props) {
                                                     token: props.user.token
                                                 }
                                             )
-                                            console.log(selectedUser)
                                         }}
                                     >
                                         <EditIcon fontSize='small' color='primary'  />
@@ -124,9 +116,10 @@ function UserTable(props) {
                         ))}
                     </TableBody>
                 </Table>
-                {open ? <UserDialog user={selectedUser} onClose={() => setOpen(false)} /> : null}
             </Paper>
+                    {open ? <UserDialog user={selectedUser} onClose={() => setOpen(false)} /> : null}
             </Container>
+                </React.Fragment>
         );
     }
 }

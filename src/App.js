@@ -29,7 +29,7 @@ function App(props) {
         let isInit = getCookie('id')
         let isToken = getCookie('token')
         if (isInit) {
-            const response = axios.get(`https://api.noirdjinn.dev/user/id/${isInit}?token=${isToken}`)
+            axios.get(`https://api.noirdjinn.dev/user/id/${isInit}?token=${isToken}`)
                 .then(userInfo => {
                     props.userUpdate(
                         userInfo.data.id,
@@ -39,7 +39,6 @@ function App(props) {
                         userInfo.data.email,
                         userInfo.data.is_admin)
                     props.changeLoaded()
-                    console.log('UserInfo', userInfo)
                 })
                 .catch(error => {
                 props.changeLoaded()
@@ -57,7 +56,7 @@ function App(props) {
           <BrowserRouter>
             <div className="">
               <Switch>
-                <Route exact path="/login" exact component={Login}/>
+                <Route exact path="/login" component={Login}/>
                 <Route exact path="/sign-up" component={SignUp}/>
                 <Layout>
                 <PrivateRoute exact path="/dashboard" component={Actions} />

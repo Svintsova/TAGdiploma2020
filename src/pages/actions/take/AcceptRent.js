@@ -20,7 +20,6 @@ function AcceptRent(props) {
         const response = axios.post(`https://api.noirdjinn.dev/lease/new?token=${props.user.token}&cell_type=${props.item.id}`)
             .then(result => {
                 setIsLoading(true)
-                console.log("Запрос аренды", result)
                 setRentResult(result.data)
 
             })
@@ -29,8 +28,6 @@ function AcceptRent(props) {
                 setIsLoading(true)
                 setIsError(true)
             })
-
-        console.log(response.data)
     }, [])
 
     if (!isLoading) {
@@ -39,7 +36,6 @@ function AcceptRent(props) {
                 <Typography
                     variant="h6"
                     align='left'
-
                 >
                     Подтверждаем ваше бронирование и генерируем код доступа..
                 </Typography>

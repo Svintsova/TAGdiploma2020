@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Home(props) {
     const classes = useStyles();
-console.log(props)
     return (
         <React.Fragment >
                 <Container maxWidth="sm" className={classes.heroContent}>

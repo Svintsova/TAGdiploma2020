@@ -93,7 +93,6 @@ function SignUp(props) {
                             // document.cookie = 'id='+encodeURIComponent(user_id)+'; max-age=3600;'
                             document.cookie = 'path=/; max-age=3600;'
                           //  document.cookie = 'token='+encodeURIComponent(user_token)+'; max-age=3600;'
-
                             props.userUpdate(
                                 user_id,
                                 user_token,
@@ -102,7 +101,6 @@ function SignUp(props) {
                                 formik.values.email)
                             setIsLoading('done')
                         })
-
                 })
                 .catch(error => {
                     setAlertError(`При регистрации произошла ошибка: ${error.response.data.err}`)
@@ -198,9 +196,9 @@ function SignUp(props) {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                           <RouterLink to="/login"> <Link href="#" variant="body2">
+                           <Link href="#" variant="body2" component={RouterLink} to="/login"  >
                                 Already have an account? Sign in
-                           </Link> </RouterLink>
+                           </Link>
                         </Grid>
                     </Grid>
                 </form>

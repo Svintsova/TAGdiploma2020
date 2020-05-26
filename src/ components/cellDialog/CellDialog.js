@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from "axios";
 import TableHead from "@material-ui/core/TableHead";
@@ -40,8 +37,6 @@ export default function CellDialog(props) {
     const [cellInfo, setCellInfo] = useState({})
     const [isLoading, setIsLoading] = useState(false)
     const classes = useStyles();
-
-    console.log(props)
     useEffect(() => {
         if (true) {
             axios.get(`https://api.noirdjinn.dev/cell/history?token=${props.token}&cell_id=${props.cell.id}&with_closed=true`)

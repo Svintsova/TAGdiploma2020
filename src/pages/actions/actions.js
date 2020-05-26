@@ -1,21 +1,16 @@
-import React, {useEffect} from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import {Link} from 'react-router-dom'
+import React from 'react';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import UserTable from "./database/UserTable";
 import TakeStepper from "./take/Take";
 import Statistics from "./statistics/Statistics";
 import CellStatus from "./cellStatus/CellStatus";
 import CloseCell from "./closeCell/CloseCell";
-import axios from "axios";
-
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 

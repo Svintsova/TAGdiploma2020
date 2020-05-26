@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
 function AvailableList(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
@@ -30,7 +29,6 @@ function AvailableList(props) {
         props.setStatus(true)
         axios.get(`https://api.noirdjinn.dev/cell/current_free_types?token=${props.user.token}`)
         .then(result => {
-            console.log('List', result);
             setAvailableItems(result.data)
             setIsLoading(true)
         })
@@ -82,8 +80,6 @@ function AvailableList(props) {
     );
 }
 }
-// variant="contained" color="primary"
-
 
 function mapStateToProps(state) {
     return {

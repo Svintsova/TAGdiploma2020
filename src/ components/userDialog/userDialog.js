@@ -1,18 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from "@material-ui/core/TextField";
 import {useFormik} from "formik";
 import axios from "axios";
+import {Alert} from "@material-ui/lab";
 
 
 export default function UserDialog(props) {
-    console.log(props)
-
+    const [alertError,setAlertError] = useState("no")
     const formik = useFormik({
         initialValues: {
             name: props.user.first_name,
@@ -24,21 +23,19 @@ export default function UserDialog(props) {
             if (formik.values.name!==props.user.first_name || formik.values.surname!==props.user.last_name) {
                 axios.post(`https://api.noirdjinn.dev/user/update_info?token=${props.user.token}`, values)
                     .then(result => {
-                        console.log('User was update', result);
                         props.onClose()
                      })
                     .catch(error => {
-                        console.log("При обновлении профиля произошла ошибка:", error)
+                        setAlertError(`При обновлении профиля произошла ошибка: ${error.response.data.err}`)
                     })
             }
             if (formik.values.is_admin!==props.user.is_admin) {
                 axios.post(`https://api.noirdjinn.dev/user/make_admin?id=${formik.values.id}&token=${props.user.token}&is_admin=${formik.values.is_admin}`)
                     .then(result => {
-                        console.log('Root was update', result);
                         props.onClose()
                     })
                     .catch(error => {
-                        console.log("При обновлении профиля произошла ошибка:", error)
+                        setAlertError(`При изменении прав доступа произошла ошибка: ${error.response.data.err}`)
                     })
             }
 
@@ -54,12 +51,11 @@ export default function UserDialog(props) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
+                {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
                 <form onSubmit={formik.handleSubmit}  >
 
                 <DialogTitle id="alert-dialog-title">{"Редактировать данные"}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-
                             <TextField
                                 id="name"
                                 variant="outlined"
@@ -90,7 +86,7 @@ export default function UserDialog(props) {
                                 value={formik.values.is_admin}
                                 onChange={formik.handleChange}
                             />
-                    </DialogContentText>
+
                 </DialogContent>
                 <DialogActions style={{paddingBottom:'20px'}}>
                     <Button  color="primary"  onClick={props.onClose}>

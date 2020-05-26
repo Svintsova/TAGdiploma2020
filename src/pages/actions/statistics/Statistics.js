@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { withStyles, makeStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
@@ -11,17 +11,15 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
-    Cell, Label,
     Legend,
     Line,
     LineChart,
-    Pie,
-    PieChart,
     Tooltip,
     XAxis,
     YAxis
 } from "recharts";
 import Paper from "@material-ui/core/Paper";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,55 +43,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function getLeasesByTypeAndDate(leasesByTypeAndDate) {
-    console.log(leasesByTypeAndDate);
-    let newAr=[]
-    leasesByTypeAndDate.forEach(element => (
-        !newAr.includes(element.date) ? newAr.push(element.date):
-        console.log(element)
-
-    ))
-
-    leasesByTypeAndDate.forEach(element => (
-        !newAr.includes(element.date) ? newAr.push(element.date):
-            console.log(element)
-    ))
-    console.log(newAr)
-}
-
-
-
 function Statistics(props) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
-    const [cellList, setCellList] = useState({})
-    const [stat, setStat] = useState({})
     const [userGrowth, setUserGrowth] = useState({})
     const [leasesGrowth, setLeasesGrowth] = useState({})
     const [leasesByType, setLeasesByType] = useState({})
     const [equipmentFreeRatio, setEquipmentFreeRatio] = useState({})
-    const [leasesByTypeAndDate, setLeasesByTypeAndDate] = useState({})
-
+    const [alertError,setAlertError] = useState("no")
 
     useEffect(() => {
         axios.get(`https://api.noirdjinn.dev/statistics/all?token=${props.user.token}`)
             .then(result => {
-                setStat(result.data)
                 setIsLoading(true)
                 setUserGrowth(result.data.user_growth_by_date)
                 setLeasesGrowth(result.data.lease_growth_by_date)
                 setLeasesByType(result.data.leases_by_type)
                 setEquipmentFreeRatio(result.data.equipment_free_ratio)
-                setLeasesByTypeAndDate(result.data.leases_by_type_and_date)
-                getLeasesByTypeAndDate(result.data.leases_by_type_and_date)
             })
             .catch(error => {
-                alert(error)
+                setAlertError(`При загрузке произошла ошибка`)
                 setIsLoading(true)
             })
     }, [])
-
-    const colors = ['#4791db','#e33371','#ffb74d','#64b5f6','#81c784']
 
     if (!isLoading) {
         return (
@@ -111,7 +83,9 @@ function Statistics(props) {
     }
     else {
         return (
-            <Container component="main" maxWidth="md">
+            <React.Fragment>
+                {alertError==="no" ? null : <Alert onClose={() => {setAlertError("no")}} severity="error">{alertError}</Alert>}
+                <Container component="main" maxWidth="md">
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Typography component="h1" variant="h5" className={classes.typography}>
@@ -186,6 +160,7 @@ function Statistics(props) {
 
 
             </Container>
+         </React.Fragment>
         );
     }
 }

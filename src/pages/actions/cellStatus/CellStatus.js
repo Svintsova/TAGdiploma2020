@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { withStyles, makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
@@ -13,21 +12,6 @@ import Container from "@material-ui/core/Container";
 import Button from '@material-ui/core/Button';
 import CellDialog from "../../../ components/cellDialog/CellDialog";
 import {connect} from "react-redux";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    typography: {
-        padding: theme.spacing(2),
-    },
-    buttonWidth: {
-        minWidth: '58px',
-        boxSizing: "border-box"
-    },
-}));
-
-
 
 function cellIcon(cell_type) {
     switch (cell_type) {
@@ -66,14 +50,11 @@ function CellStatus(props) {
     const [open, setOpen] = React.useState(false);
     const [selectedCell, setSelectedCell] = useState({})
 
-
     useEffect(() => {
         axios.get(`https://api.noirdjinn.dev/cell/statuses`)
             .then(result => {
                 setCellList(result.data)
                 setIsLoading(true)
-
-
             })
             .catch(error => {
                 alert(error)
@@ -109,7 +90,6 @@ function CellStatus(props) {
                                 onClick={() => {
                                     setOpen(true)
                                     setSelectedCell(cell)
-                                    console.log(selectedCell)
                                 }}
 
                             >

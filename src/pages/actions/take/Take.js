@@ -42,15 +42,9 @@ function getStepContent(step) {
                 <Typography>Выберите оборудование для аренды. Обращаем ваше внимание,
             что для бронирования нескольких объектов, вам необходимо получить код на каждый из них.</Typography>);
         case 1:
-            return (
-                    <AvailableList />
-            );
+            return (<AvailableList />);
         case 2:
-            return (
-                <AcceptRent />
-
-            );
-
+            return (<AcceptRent />);
         default:
             return 'Unknown step';
     }

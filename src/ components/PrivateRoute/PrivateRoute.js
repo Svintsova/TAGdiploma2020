@@ -1,6 +1,6 @@
-import React, { ComponentClass, FunctionComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import {Redirect, Route, RouteComponentProps, RouteProps} from 'react-router';
+import {Redirect, Route} from 'react-router';
 
 
 const PrivateRoute = ({ component, admin, user, ...rest }) => {

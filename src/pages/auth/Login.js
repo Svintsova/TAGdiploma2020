@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SignIn(props) {
-    console.log(props)
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false)
     const [alertError,setAlertError] = useState("no")
@@ -156,9 +155,9 @@ function SignIn(props) {
 
                         </Grid>
                         <Grid item>
-                            <RouterLink to='/sign-up'><Link href="#" variant="body2">
+                            <Link href="#" variant="body2" component={RouterLink}  to='/sign-up'>
                                 {"Don't have an account? Sign Up"}
-                            </Link> </RouterLink>
+                            </Link>
                         </Grid>
                     </Grid>
                 </form>

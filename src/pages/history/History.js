@@ -91,7 +91,6 @@ function History(props) {
     useEffect(() => {
         axios.get(`https://api.noirdjinn.dev/lease/leases_by_user?token=${props.user.token}&with_closed=true`)
             .then(result => {
-                console.log('Leases', result);
                 setLeasesList(result.data)
                 setIsLoading(true)
             })
