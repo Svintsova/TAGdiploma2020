@@ -120,7 +120,7 @@ function SignUp(props) {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign up
+                    Регистрация в системе
                 </Typography>
                 <form className={classes.form} onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
@@ -132,7 +132,7 @@ function SignUp(props) {
                                 required
                                 fullWidth
                                 id="firstName"
-                                label="First Name"
+                                label="Имя"
                                 autoFocus
                                 onChange={formik.handleChange}
                                 value={formik.values.name}
@@ -145,7 +145,7 @@ function SignUp(props) {
                                 required
                                 fullWidth
                                 id="lastName"
-                                label="Last Name"
+                                label="Фамилия"
                                 name="surname"
                                 autoComplete="lname"
                                 onChange={formik.handleChange}
@@ -159,7 +159,7 @@ function SignUp(props) {
                                 required
                                 fullWidth
                                 id="email"
-                                label="Email Address"
+                                label="Почта"
                                 name="email"
                                 autoComplete="email"
                                 onChange={formik.handleChange}
@@ -173,7 +173,7 @@ function SignUp(props) {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="Пароль"
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
@@ -191,12 +191,12 @@ function SignUp(props) {
                         className={classes.submit}
                         disabled={isLoading||formik.errors.name||formik.errors.surname||formik.errors.email||formik.errors.password}
                     >
-                        Sign Up
+                        Зарегистрироваться
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
                            <Link href="#" variant="body2" component={RouterLink} to="/login"  >
-                                Already have an account? Sign in
+                                Уже есть аккаунт? Войти
                            </Link>
                         </Grid>
                     </Grid>

@@ -110,7 +110,7 @@ function SignIn(props) {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Вход в систему
                 </Typography>
                 <form className={classes.form} onSubmit={formik.handleSubmit}>
                     <TextField
@@ -119,7 +119,7 @@ function SignIn(props) {
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
+                        label="Почта"
                         name="email"
                         autoComplete="email"
                         autoFocus
@@ -133,7 +133,7 @@ function SignIn(props) {
                         required
                         fullWidth
                         name="password"
-                        label="Password"
+                        label="Пароль"
                         type="password"
                         id="password"
                         autoComplete="current-password"
@@ -142,7 +142,7 @@ function SignIn(props) {
                     />
                     <FormControlLabel
                         control={<Checkbox name="remember" id="remember" value={formik.values.remember} onChange={formik.handleChange} color="primary" />}
-                        label="Remember me"
+                        label="Запомнить"
                     />
                         <Button
                         type="submit"
@@ -152,7 +152,7 @@ function SignIn(props) {
                         className={classes.submit}
                         disabled={isLoading||formik.errors.email}
                         >
-                            Sign In
+                            Войти
                         </Button>
                     <Grid container>
                         <Grid item xs>
@@ -160,7 +160,7 @@ function SignIn(props) {
                         </Grid>
                         <Grid item>
                             <Link href="#" variant="body2" component={RouterLink}  to='/sign-up'>
-                                {"Don't have an account? Sign Up"}
+                                {"Еще нет аккаунта? Зарегистрироваться"}
                             </Link>
                         </Grid>
                     </Grid>
