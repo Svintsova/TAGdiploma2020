@@ -70,6 +70,10 @@ function SignIn(props) {
                         document.cookie = 'id=' + encodeURIComponent(user_id) + '; max-age=86400;'
                         document.cookie = 'token=' + encodeURIComponent(user_token) + '; max-age=86400;'
                     }
+                    else {
+                        document.cookie = 'id=' + encodeURIComponent(user_id) + '; max-age=3600;'
+                        document.cookie = 'token=' + encodeURIComponent(user_token) + '; max-age=3600;'
+                    }
 
                     axios.get(`https://api.noirdjinn.dev/user/id/${user_id}?token=${user_token}`)
                         .then(userInfo => {
