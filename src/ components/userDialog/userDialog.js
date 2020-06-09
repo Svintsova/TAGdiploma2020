@@ -8,16 +8,23 @@ import TextField from "@material-ui/core/TextField";
 import {useFormik} from "formik";
 import axios from "axios";
 import {Alert} from "@material-ui/lab";
-
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 export default function UserDialog(props) {
     const [alertError,setAlertError] = useState("no")
+    const [adminState, setAdminState] = useState(props.user.is_admin)
+    const handleChange = (event) => {
+        setAdminState(event.target.checked);
+    };
+
     const formik = useFormik({
         initialValues: {
             name: props.user.first_name,
             surname:props.user.last_name,
             id: props.user.id,
             is_admin: props.user.is_admin,
+            pass: props.user.pass,
         },
         onSubmit: (values, actions) => {
             if (formik.values.name!==props.user.first_name || formik.values.surname!==props.user.last_name) {
@@ -77,15 +84,26 @@ export default function UserDialog(props) {
                                 onChange={formik.handleChange}
                             />
                             <TextField
+                                id="pass"
                                 variant="outlined"
+                                label="ID-карта"
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="is_admin"
-                                label="Администратор"
-                                value={formik.values.is_admin}
+                                value={formik.values.pass}
                                 onChange={formik.handleChange}
                             />
+                            <FormControlLabel
+                                control={<Switch
+                                    checked={formik.values.is_admin}
+                                    onChange={formik.handleChange}
+                                    name="is_admin"
+                                    id="is_admin"
+                                    color="primary"
+                                />}
+                                label="Права администратора"
+                            />
+
 
                 </DialogContent>
                 <DialogActions style={{paddingBottom:'20px'}}>

@@ -7,6 +7,11 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import {connect} from "react-redux";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import IconButton from "@material-ui/core/IconButton";
+import PersonIcon from '@material-ui/icons/Person';
+import HistoryIcon from '@material-ui/icons/History';
+import AppsIcon from '@material-ui/icons/Apps';
 
 export const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -25,8 +30,21 @@ export const useStyles = makeStyles((theme) => ({
     toolbarTitle: {
         flexGrow: 1,
     },
+    
+    exic: {
+        margin: theme.spacing(1, 1.5),
+        [theme.breakpoints.between('md','xl')]: {
+            display: "none",
+        },
+    },
+
     link: {
         margin: theme.spacing(1, 1.5),
+        [theme.breakpoints.between('xs','sm')]: {
+            display: 'none',
+            margin: '0px',
+            padding: '0px',
+        },
     },
 
 }));
@@ -46,20 +64,32 @@ function NavBar(props)  {
                         <Link variant="button" color="textPrimary" component={RouterLink} to="/dashboard" className={classes.link}>
                         Действия
                         </Link>
-
+                        <IconButton component={RouterLink} to="/dashboard"  aria-label="delete" className={classes.exic}>
+                            <AppsIcon />
+                        </IconButton>
 
                         <Link variant="button" color="textPrimary" component={RouterLink} to="/history" className={classes.link}>
                             История
                         </Link>
+                        <IconButton component={RouterLink} to="/history"  className={classes.exic}>
+                            <HistoryIcon />
+                        </IconButton>
 
                         <Link variant="button" color="textPrimary" component={RouterLink} to="/profile" className={classes.link}>
                         Профиль
                         </Link>
+                        <IconButton component={RouterLink} to="/profile"   className={classes.exic}>
+                            <PersonIcon />
+                        </IconButton>
 
                 </nav>
                     <Button component={RouterLink} to="/login" color="primary" variant="outlined" className={classes.link} onClick={props.logOut}>
-                    Выход
+                        Выход
                     </Button>
+                    <IconButton onClick={props.logOut} component={RouterLink} to="/login"  aria-label="delete" className={classes.exic}>
+                        <ExitToAppIcon />
+                    </IconButton>
+
             </Toolbar>
         </AppBar>
 

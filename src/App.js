@@ -15,6 +15,7 @@ import Database from "./pages/actions/database/Database";
 import PrivateRoute from "./ components/PrivateRoute/PrivateRoute";
 import {connect} from "react-redux";
 import axios from "axios";
+import Container from "@material-ui/core/Container";
 
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
@@ -59,13 +60,12 @@ function App(props) {
                 <Route exact path="/login" component={Login}/>
                 <Route exact path="/sign-up" component={SignUp}/>
                 <Layout>
-                <PrivateRoute exact path="/dashboard" component={Actions} />
-                <PrivateRoute exact path="/history" component={History} />
-                <PrivateRoute exact path="/profile" component={Profile} />
-                <PrivateRoute exact admin path="/database" component={Database} />
-                <PrivateRoute exact path="/" component={Home} />
+                    <PrivateRoute exact path="/dashboard" component={Actions} />
+                    <PrivateRoute exact path="/history" component={History} />
+                    <PrivateRoute exact path="/profile" component={Profile} />
+                    <PrivateRoute exact admin path="/database" component={Database} />
+                    <PrivateRoute exact path="/" component={Home} />
                 </Layout>
-
               </Switch>
                 <Box mt={8}>
                     <Copyright />
@@ -98,12 +98,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(App)
 export function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="/">
-                Take ang go. HSE MIEM.
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
+            {'Веб-приложение: Свинцова Анастасия'}<br/>
+            {'Сервер и база данных: Конышев Дмитрий'}<br/>
+            {'Мобильное приложение: Агасандян Богдан'}<br/>
+            {'Аппаратная часть: Карабанов Илья'}<br/>
+            <Link color="inherit" href="https://www.hse.ru/edu/vkr/368722612">
+                Take ang go. HSE MIEM. 2020.
+            </Link>
         </Typography>
     );
 }

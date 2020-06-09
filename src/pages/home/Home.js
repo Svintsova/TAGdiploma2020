@@ -29,7 +29,6 @@ function Home(props) {
                     <Typography variant="h5" align="center" color="textSecondary" paragraph>
                         Вы находитесь на стартовой странице веб-приложения, выполненного в
                         рамках ВКР "Автоматизированная система выдачи оборудования".
-
                     </Typography>
                     <div className={classes.heroButtons}>
                         <Grid container spacing={2} justify="center">

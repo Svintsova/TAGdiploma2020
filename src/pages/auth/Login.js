@@ -62,7 +62,6 @@ function SignIn(props) {
             setIsLoading(true)
             axios.post(`https://api.noirdjinn.dev/user/authenticate?email=${values.email}&password=${values.password}`)
                 .then(result => {
-//cookies
                     let user_id = result.data.user_id
                     let user_token = result.data.access_token
                     document.cookie = 'path=/; max-age=3600;'
@@ -90,7 +89,7 @@ function SignIn(props) {
 
                 })
                 .catch(error => {
-                    setAlertError(`При попытке пойти произошла ошибка: ${error.response.data.err}`)
+                    setAlertError(`При попытке войти произошла ошибка: ${error.response.data.err}`)
                     setIsLoading(false)
 
                 })

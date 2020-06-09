@@ -22,7 +22,6 @@ function cellIcon(cell_type) {
         case 2:
             return (
                 <DescriptionIcon />
-
             );
         case 3:
             return (

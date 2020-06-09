@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
     },
     paper: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(4),
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
@@ -44,6 +44,7 @@ function UserTable(props) {
             .then(result => {
                 setUserList(result.data)
                 setIsLoading(true)
+                console.log(result.data)
 
             })
             .catch(error => {
@@ -76,6 +77,7 @@ function UserTable(props) {
                 <Table size="small" className={classes.table}>
                     <TableHead>
                         <TableRow>
+                            <TableCell>ID-карта</TableCell>
                             <TableCell>Имя</TableCell>
                             <TableCell>Фамилия</TableCell>
                             <TableCell>Почта</TableCell>
@@ -86,6 +88,7 @@ function UserTable(props) {
                     <TableBody>
                         {userList.Users.map((row) => (
                             <TableRow key={row.id}>
+                                <TableCell>{row.hse_pass}</TableCell>
                                 <TableCell>{row.first_name}</TableCell>
                                 <TableCell>{row.last_name}</TableCell>
                                 <TableCell>{row.email}</TableCell>
@@ -104,7 +107,8 @@ function UserTable(props) {
                                                     first_name: row.first_name,
                                                     last_name: row.last_name,
                                                     is_admin: row.is_admin,
-                                                    token: props.user.token
+                                                    token: props.user.token,
+                                                    pass: row.hse_pass
                                                 }
                                             )
                                         }}

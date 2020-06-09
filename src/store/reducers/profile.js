@@ -1,5 +1,3 @@
-
-
 const initialState = {
     user: null,
     loading: false,
